@@ -1,0 +1,15 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+ font-family: "Urbanist", sans-serif;
+}
+.bg-custom {
+ background-color: #747bff;
+}
+.text-custom {
+ color: #747bff;
+}
+
