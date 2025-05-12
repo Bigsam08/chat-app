@@ -21,16 +21,17 @@ const register = async (req, res) => {
         if (!email || !password || !userName) {
             return res.status(400).json({ message: "All fields must be filled" });
         }
-        // confirm password is greater than 8 characters long
-        if (password.length < 8) {
-            return res.status(400).json({ message: "Password must be at least 8 characters" });
-        }
-
         // check if email already exist in the DB
         const checkUser = await User.findOne({ email });
         if (checkUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
+
+        // confirm password is greater than 8 characters long
+        if (password.length < 8) {
+            return res.status(400).json({ message: "Password must be at least 8 characters" });
+        }
+
 
         //hash user password
         const salt = await bcrypt.genSalt(10);
@@ -45,7 +46,8 @@ const register = async (req, res) => {
 
         // save new user to database
         await newUser.save();
-        res.status(201).json({message : "Account created Successfully"
+        res.status(201).json({
+            message: "Account created Successfully"
         })
 
     } catch (error) {
@@ -59,6 +61,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: "All fields required" })
 
     try {
         const checkUser = await User.findOne({ email });
@@ -73,14 +76,14 @@ const login = async (req, res) => {
         // if password and email is found
         // generate a jwt for the login
         generateToken(checkUser._id, res);
-        return res.status(200).json({ 
+        return res.status(200).json({
             message: "Authentication Successful!",
             user: {
                 email: checkUser.email,
                 userName: checkUser.userName,
                 profilePic: checkUser.profilePic
             }
-         })
+        })
 
 
     } catch (error) {
