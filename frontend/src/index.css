@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Comfortaa", sans-serif;
+}
+/* Tailwind CSS for autofill handling */
+input:-webkit-autofill {
+  background-color: #111827 !important; /* Tailwind bg-gray-900 */
+  color: #e5e7eb !important; /* Tailwind text-gray-200 */
+  -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important; /* force background */
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+input:-webkit-autofill:focus {
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+  -webkit-box-shadow: 0 0 0px 1000px #111827 inset !important;
+}
+
+
+.bg-custom {
+  background:#581C87
+
+   /* gray-900 to gray-800 */
+}

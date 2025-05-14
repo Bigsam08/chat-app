@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 
 import LoginPage from "./Pages/LoginPage";
@@ -23,16 +23,34 @@ const App = () => {
   }
 
   return (
-    <div className="">
+    <div>
       <Routes>
-        <Route path="/" element={ !userAuth ? <LoginPage /> : <Navigate to="/chat" />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/forget-password" element={<ForgetPasswordPage />} />
-        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-        <Route path="/chat" element={userAuth ? <ChatPage /> : <Navigate to="/" />} />
+        <Route
+          path="/"
+          element={!userAuth ? <LoginPage /> : <Navigate to="/chat" />}
+        />
+        <Route
+          path="/sign-up"
+          element={!userAuth ? <SignUpPage /> : <Navigate to="/chat" />}
+        />
+        <Route
+          path="/settings"
+          element={userAuth ? <Settings /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/forget-password"
+          element={!userAuth ? <ForgetPasswordPage /> : <Navigate to="/chat" />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={!userAuth ? <ResetPasswordPage /> : <Navigate to="/chat" />}
+        />
+        <Route
+          path="/chat"
+          element={userAuth ? <ChatPage /> : <Navigate to="/" />}
+        />
       </Routes>
-      <ToastContainer position="top-center" />
+      <Toaster position="top-center" />
     </div>
   );
 };

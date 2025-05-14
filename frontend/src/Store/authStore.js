@@ -1,12 +1,12 @@
-// global state managemnt for authentication
+// global state management for authentication
 
 import { create } from "zustand";
 import { authAxios } from "../Api/auth.axios"; // auth api request
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 
 export const authStore = create((set) => ({
-    //chek user auth
+    //check user auth
     checkingAuth: true,
     userAuth: null,
     checkAuth: async () => {
@@ -47,21 +47,21 @@ export const authStore = create((set) => ({
     registrationSuccess: false,
     isRegistering: false,
     register: async (data) => {
-        set({isRegistering: true })
+        set({ isRegistering: true })
         try {
             const response = await authAxios.post("/register", data);
             if (response.status == 201) {
-                set({registrationSuccess: true, isRegistering: false })
+                set({ registrationSuccess: true, isRegistering: false })
                 toast.success(response.data?.message || "Account created successfully!😀")
             } // account has been added
-            
+
         } catch (error) {
-               set({registrationSuccess: false, isRegistering: false })
+            set({ registrationSuccess: false, isRegistering: false })
             if (!error.response) {
                 return toast.error("Server currently down, try again later");
             }
-            console.log("Error in the register store"  ,error.message)
-            return toast.error(error.response?.data?.message || "Unexpected error! 😔");   
+            console.log("Error in the register store", error.message)
+            return toast.error(error.response?.data?.message || "Unexpected error! 😔");
         }
     },
 

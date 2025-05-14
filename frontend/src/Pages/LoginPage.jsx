@@ -1,105 +1,138 @@
-import { Link, useNavigate } from "react-router-dom";
-import { authStore } from "../Store/authStore";
-import EmailIcon from "@mui/icons-material/Email";
-import LockIcon from "@mui/icons-material/Lock";
-import PersonIcon from "@mui/icons-material/Person";
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import FormField from "../Component/FormField";
+import CustomButton from "../Component/CustomButton";
+import Spinner from "../Component/Spinner";
+import { authStore } from "../Store/authStore";
+import { toast } from "react-hot-toast";
+import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline"; // icons
+import { motion as Motion, AnimatePresence } from "framer-motion";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const data = { email, password };
+  const { loginSuccess, login, logginIn } = authStore();
 
-  const { loginSuccess, logginIn, login } = authStore();
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
 
+  // submit user data to backend for authentication
   const submitData = (e) => {
     e.preventDefault();
+    if (!data.email || !data.password)
+      return toast.error("All fields required");
+
     login(data);
   };
-
+  // react to authentication response
+  // if success navigate to the chat page
   useEffect(() => {
     if (loginSuccess) {
       navigate("/chat");
     }
-  }, [navigate, loginSuccess]);
+  }, [loginSuccess, navigate]);
+
   return (
-    <div className="bg-custom h-screen flex justify-center items-center p-5">
-      {/**-------- middle container------- */}
-      <div className="flex flex-col md:flex-row lg:w-3/5 justify-between p-5">
-        {/** form box */}
-        <div className="relative bg-white px-3 pt-10 w-full md:w-1/2 rounded-3xl shadow-2xl order-2 md:order-1">
-          <PersonIcon
-            className="absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 bg-white rounded-full text-gray-600 border-t-4"
-            sx={{
-              fontSize: {
-                xs: "60px", // mobile (default)
-                sm: "80px", // from small screens and above
-              },
-            }}
-          />
-          <h1 className="text-2xl font-bold text-gray-600 text-center tracking-widest">
-            Welcome Back
-            <span className="inline-block animate-bounce">😀 </span>
-          </h1>
-          <p className="text-center text-sm text-gray-500 font-thin">
-            sign into your account
-          </p>
-          <form onSubmit={submitData} className=" mt-10 p-2">
-            <div className="relative mb-5">
-              <EmailIcon className="text-gray-600 absolute top-3 left-2" />
-              <input
+    <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">
+      {/** form */}
+      <div className="flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
+        <AnimatePresence>
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-10"
+          >
+            {/* Logo/Title */}
+            <div className="flex justify-center">
+              <img src="/chatlogo.png" alt="Q chat logo" className="" />
+            </div>
+
+            {/* Welcome Message */}
+            <p className="text-center text-base font-sans font-extrabold text-gray-600 mt-3">
+              Welcome back
+              <span className="inline-block animate-bounce text-lg ml-1">
+                😀
+              </span>
+            </p>
+            <p className="text-center mb-8 text-sm text-gray-500">
+              Secure login to connect instantly.
+            </p>
+
+            {/* Form */}
+            <form onSubmit={submitData} className="space-y-4">
+              <FormField
+                name="email"
+                label="Email"
+                placeholder="johndoe@gmail.com"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@gmail.com"
-                className="w-full py-3 px-9  bg-gray-200 rounded-xl text-gray-600 focus:outline-none hover:shadow-lg"
+                onChange={(e) => setData({ ...data, email: e.target.value })}
+                value={data.email}
+                icon={<EnvelopeIcon className="w-5 h-5" />}
               />
-            </div>
-            <div className="relative mb-5">
-              <LockIcon className="text-gray-600 absolute top-3 left-2" />
-              <input
+              <FormField
+                icon={<LockClosedIcon className="h-5 w-5" />}
+                name="password"
+                label="Password"
+                placeholder="Enter password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="enter password"
-                className="w-full py-3 px-9  bg-gray-200 rounded-xl text-gray-600 focus:outline-none hover:shadow-lg"
+                onChange={(e) => setData({ ...data, password: e.target.value })}
+                value={data.password}
               />
+              <CustomButton
+                type="submit"
+                isLoading={logginIn}
+                text="Login"
+                loadingText="Logging in..."
+                loadingComponent={<Spinner />}
+              />
+            </form>
+
+            {/* Divider */}
+            <hr className="my-6 border-gray-200" />
+
+            {/* Links */}
+            <div className="text-sm flex justify-between px-2 text-gray-500">
+              <Link
+                to="/sign-up"
+                className="hover:text-gray-900 transition-colors duration-200"
+              >
+                Create account
+              </Link>
+              <Link
+                to="/forget-password"
+                className="hover:text-gray-900 transition-colors duration-200"
+              >
+                Forgot password?
+              </Link>
             </div>
-            <button
-              type="submit"
-              disabled={logginIn}
-              className="tracking-widest bg-custom hover:bg-green-500 w-full text-gray-200 rounded-xl py-3 transition-all duration-500 ease-out mb-5 disabled:cursor-not-allowed hover:shadow-inner"
-            >
-              {logginIn ? "Logging In ..." : "Login "}
-            </button>
-          </form>{" "}
-          <hr />
-          <div className=" flex items-center justify-between my-3 text-sm text-gray-400 px-2">
-            <Link to="/sign-up" className="hover:text-gray-800">
-              {" "}
-              Create account{" "}
-            </Link>
-            <Link to="/forget-password" className="hover:text-gray-800">
-              forget password{" "}
-            </Link>
-          </div>
-        </div>
-        {/** message box */}
-        <div className="flex flex-col justify-center items-center mb-10 text-white text-center w-full md:w-1/2 p-3 order-1 md:order-2">
-          <h1 className="text-center  text-2xl font-bold mb-2 text-shadow-lg">
-            {" "}
-            Q Chat
-          </h1>
-          <p className="text-sm sm:text-md md:text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
-            dignissimos, ex voluptas consequatur voluptatum harum eaque facere
-            dolores, quod vero et fuga laboriosam non, corporis quibusdam
-            inventore! Vitae, dolorem deserunt. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Alias reiciendis excepturi a qui natus
-            voluptate ipsam, ut nisi quibusdam numquam sint dignissimos
-            aspernatur laudantium id aperiam obcaecati, vel dolorum culpa?
+          </Motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/** text */}
+      <div className="hidden md:flex items-center justify-center rounded-2xl shadow-lg md:p-16">
+        <div className="flex flex-col items-center text-center p-6 max-w-md">
+          <img
+            src="/chat3.svg"
+            alt="Secure chat image"
+            className="w-80 h-auto mb-6"
+          />
+
+          <h2 className="text-2xl font-semibold text-white mb-3 leading-tight">
+            Chat securely and instantly
+          </h2>
+
+          <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+            Experience real-time conversations in a fully encrypted, fast, and
+            intuitive messaging platform built for modern communication.
           </p>
+
+          <div className="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+            🔒 End-to-end encrypted
+          </div>
         </div>
       </div>
     </div>
