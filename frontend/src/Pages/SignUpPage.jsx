@@ -84,7 +84,7 @@ const SignUpPage = () => {
             {/* Welcome Message */}
             <p className="text-center text-base text-gray-600 mt-3  font-sans font-extrabold">
               Create account
-              <span className="inline-block animate-bounce text-lg ml-1">
+              <span className="inline-block animate-bounce text-2xl ml-1">
                 😀
               </span>
             </p>

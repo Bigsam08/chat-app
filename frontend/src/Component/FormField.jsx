@@ -10,6 +10,8 @@ const FormField = ({
   value,
   onChange,
   placeholder,
+  labelColor = "text-gray-800",
+  readOnly = false,
   autoComplete = "on",
 }) => {
   const inputId = `input-${name}`; // dynamically get the html if from input name
@@ -22,7 +24,7 @@ const FormField = ({
   return (
     <div className="form-control w-full mb-4">
       <label htmlFor={inputId} className="label">
-        <span className="label-text text-base font-medium text-gray-800">
+        <span className={`label-text text-base font-medium ${labelColor}`}>
           {label}
         </span>
       </label>
@@ -39,10 +41,13 @@ const FormField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`input input-bordered w-full focus:outline-none bg-gray-900 ${
+          className={`input input-bordered w-full focus:outline-none ${
+            readOnly ? "bg-gray-700 text-gray-400 italic" : "bg-gray-900"
+          } ${
             icon ? "pl-10" : "pl-4"
           } relative z-0 transition-all duration-200`}
           autoComplete={autoComplete}
+          readOnly={readOnly}
         />
         {type === "password" && (
           <button

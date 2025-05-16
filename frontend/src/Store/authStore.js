@@ -30,7 +30,7 @@ export const authStore = create((set) => ({
         try {
             const response = await authAxios.post("/login", data);
             if (response.status === 200) {
-                toast.success(`Welcome back ${response?.data?.user?.userName} || Login Successful`)
+                toast.success(`Welcome back ${response?.data?.user?.userName}`)
                 set({ logginIn: false, loginSuccess: true, userAuth: response.data.user })
             }
 
@@ -62,6 +62,98 @@ export const authStore = create((set) => ({
             }
             console.log("Error in the register store", error.message)
             return toast.error(error.response?.data?.message || "Unexpected error! 😔");
+        }
+    },
+
+    // logOut 
+    logout: async () => {
+        try {
+            const response = await authAxios.post("/check")
+            if (response.status === 200) {
+                set({ userAuth: null })
+                toast.success(response.data?.message || "log out successful bye!");
+                return;
+            }
+            // Handle unexpected response status
+            toast.error("Unexpected response status during logout.");
+        } catch (error) {
+            if (error.response) {
+                return toast.error(error.response?.data?.message || "Server error, log out")
+            } else {
+                return toast.error("An error occurred while logging out.");
+            }
+        }
+    },
+
+    // update profile picture
+    isUpdatingProfilePic: false,
+    updateProfilePic: async (data) => {
+        set({ isUpdatingProfilePic: true, })
+        try {
+            const response = await authAxios.put('/update-profilePic', data)
+            set((state) => ({
+                userAuth: {
+                    ...state.userAuth,
+                    profilePic: response.data.profilePic
+                },
+            }));
+            toast.success("Profile picture updated successfully")
+        } catch (error) {
+            if (!error.response) {
+                console.log("error in update store", error.message)
+                return toast.error("Server currently unreachable Profile failed to update")
+            }
+            return toast.error(error.response?.data?.message || "Unexpected error has occurred")
+        } finally {
+            set({ isUpdatingProfilePic: false, })
+        }
+
+    },
+
+    // update status
+    isUpdatingStatus: false,
+    updateProfileStatus: async (status) => {
+        set({ isUpdatingStatus: true })
+        try {
+            const response = await authAxios.put("update-status", { status });
+            if (response.status === 200) {
+                set((state) => ({
+                    userAuth: {
+                        ...state.userAuth,
+                        status: response.data.updatedStatus
+                    }
+                }))
+                toast.success("Status updated successfully")
+            }
+
+        } catch (error) {
+            if (!error.response) {
+                console.log("error in update store", error.message)
+                return toast.error("Server currently unreachable Profile failed to update")
+            }
+            return toast.error(error.response?.data?.message || "Unexpected error has occurred")
+
+        } finally {
+            set({ isUpdatingStatus: false })
+        }
+    },
+
+    // delete user permanently
+    isDeleting: false,
+    deleteUser: async () => {
+        set({ isDeleting: true })
+        try {
+            await authAxios.delete("/delete-user");
+            set({ userAuth: null })
+            return toast.success("Account Deleted successfully");
+        } catch (error) {
+            if (!error.response) {
+                return toast.error("Server currently down try again later")
+            } else {
+                return toast.error("Unexpected error has occurred try again later")
+            }
+        } finally {
+            set({ isDeleting: false })
         }
     },
 

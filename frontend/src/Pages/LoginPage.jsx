@@ -53,7 +53,7 @@ const LoginPage = () => {
             {/* Welcome Message */}
             <p className="text-center text-base font-sans font-extrabold text-gray-600 mt-3">
               Welcome back
-              <span className="inline-block animate-bounce text-lg ml-1">
+              <span className="inline-block animate-bounce text-2xl ml-1">
                 😀
               </span>
             </p>

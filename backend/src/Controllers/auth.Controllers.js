@@ -8,10 +8,36 @@
  */
 
 const bcrypt = require('bcrypt'); // to hash the password
-const User = require('../Models/User.model') // model schema for users
 const generateToken = require('../Utils/generateJwt');
-const { cloudinary } = require('../Utils/cloudinary');
+const cloudinary = require('../Utils/cloudinary');
 
+const User = require('../Models/User.model') // model schema for users
+const Message = require('../Models/message.model') // message model
+
+const checkAuth = async (req, res) => {
+    /**
+     * once the user has passed authentication
+     * send User details back to client
+     * anytime user refreshes page
+     */
+
+    try {
+        //send the user details gotten from inside the cookies id
+        res.status(200).json({
+            user: {
+                email: req.user.email,
+                userName: req.user.userName,
+                profilePic: req.user.profilePic,
+                status: req.user.status,
+                createdAt: req.user.createdAt
+            }
+        })
+
+    } catch (error) {
+        console.log("error in check controller", error.message);
+        return res.status(500).json({ message: "Internal Server Error" })
+    }
+}
 
 const register = async (req, res) => {
     const { email, password, userName } = req.body;
@@ -81,11 +107,11 @@ const login = async (req, res) => {
             user: {
                 email: checkUser.email,
                 userName: checkUser.userName,
-                profilePic: checkUser.profilePic
+                profilePic: checkUser.profilePic,
+                status: checkUser.status,
+                createdAt: checkUser.createdAt
             }
         })
-
-
     } catch (error) {
         console.log("Error in the controller connection", error.message);
         return res.status(500).json({ message: " Internal Server error" });
@@ -106,7 +132,7 @@ const logout = async (req, res) => {
     }
 }
 
-const update = async (req, res) => {
+const updateProfilePic = async (req, res) => {
     /**
      * Function for user to update status
      * get the pic url via req.body
@@ -126,13 +152,13 @@ const update = async (req, res) => {
         // update the pic and store it in the user DB
         // find the user by his id and update the pp field
 
-        const updateUser = await User.findByIdAndUpdate(userId, {
+        const user = await User.findByIdAndUpdate(userId, {
             profilePic: uploadPic.secure_url
         },
             { new: true }
         )
-
-        res.status(200).json({ user: updateUser });
+        // send back the profile pic updated 
+        res.status(200).json({ profilePic: user.profilePic });
 
     } catch (error) {
         console.log("error in  profile controller", error.message);
@@ -140,28 +166,41 @@ const update = async (req, res) => {
     }
 }
 
-const checkAuth = async (req, res) => {
-    /**
-     * once the user has passed authentication
-     * send User details back to client
-     * anytime user refreshes page
-     */
-
+const updateStatus = async (req, res) => {
+    // update user status in the db
     try {
-        //send the user details gotten from inside the cookies id
-        res.status(200).json({
-            user: {
-                email: req.user.email,
-                userName: req.user.userName,
-                profilePic: req.user.profilePic
-            }
-        })
-
+        // get the user id
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        user.status = req.body.status; // status update gotten from the front end
+        await user.save(); // save to db 
+        return res.status(200).json({ message: "Status updated successfully", updatedStatus: user.status });
     } catch (error) {
-        console.log("error in check controller", error.message);
-        return res.status(500).json({ message: "Internal Server Error" })
+        console.log("error in the update status controller", error.message)
+        return res.status(500).json({ message: "Internal server error" })
     }
 }
 
+const deleteUser = async (req, res) => {
+    const userId = req.user._id;
+    try {
+        // for parallel deletion and faster
+        // delete all the user messages int he message model
+        // delete all the user data in the user model
+        await Promise.all([
+            Message.deleteMany({ user: userId }),
+            User.findByIdAndDelete(userId)
+        ]);
 
-module.exports = { register, login, logout, update, checkAuth };
+        // delete jwt in cookie
+        res.cookie("jwt", "", { maxAge: 0 });
+        return res.status(200).json({ message: "Account successfully deleted" });
+
+    } catch (error) {
+        console.error("Delete error:", error.message);
+        res.status(500).json({ message: "Failed to delete account" });
+    }
+
+}
+
+module.exports = { register, login, logout, updateProfilePic, updateStatus, checkAuth, deleteUser };

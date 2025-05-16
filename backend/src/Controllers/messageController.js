@@ -35,10 +35,9 @@ const getUsers = async (req, res) => {
         const user = req.user._id;
 
         // query db to fetch all the user data excluding current user and all passwords
-        const fetchAllUsers = await User.find({ _id: { $ne: user } }).select("-password")
-
+        const allUsers = await User.find({ _id: { $ne: user } }).select("-password")
         // return all users to client
-        res.status(200).json(fetchAllUsers);
+        return res.status(200).json(allUsers);
     } catch (error) {
         console.log("Error in message Controller", error.message)
         return res.status(500).json({ error: "Internal Server Error" })
