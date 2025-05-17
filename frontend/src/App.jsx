@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { useEffect } from "react";
+import {  useEffect } from "react";
 
 import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
@@ -9,17 +9,23 @@ import ForgetPasswordPage from "./Pages/ForgetPasswordPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import ChatPage from "./Pages/ChatPage";
 import { authStore } from "./Store/authStore";
+import MainLoader from "./Component/Loaders/MainLoader";
 
 const App = () => {
-  const { userAuth, checkAuth, checkingAuth } = authStore();
+  const userAuth = authStore((state) => state.userAuth);
+  const checkingAuth = authStore((state) => state.checkingAuth);
+  const checkAuth = authStore((state) => state.checkAuth);
 
-  // check if the user is logged in on page
-  // show loader while checking
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-  if (checkingAuth && !userAuth) {
-    return;
+
+   useEffect(() => {
+    console.log("Current userAuth app.js:", userAuth);
+  }, [userAuth]);
+
+  if (checkingAuth) {
+    return <MainLoader />;
   }
 
   return (

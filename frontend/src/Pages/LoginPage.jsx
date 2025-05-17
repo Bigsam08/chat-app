@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import FormField from "../Component/FormField";
 import CustomButton from "../Component/CustomButton";
-import Spinner from "../Component/Spinner";
+import Spinner from "../Component/Loaders/Spinner";
 import { authStore } from "../Store/authStore";
 import { toast } from "react-hot-toast";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline"; // icons
 import { motion as Motion, AnimatePresence } from "framer-motion";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const { loginSuccess, login, logginIn } = authStore();
+  const { login, logginIn } = authStore();
 
   const [data, setData] = useState({
     email: "",
@@ -22,16 +21,8 @@ const LoginPage = () => {
     e.preventDefault();
     if (!data.email || !data.password)
       return toast.error("All fields required");
-
     login(data);
   };
-  // react to authentication response
-  // if success navigate to the chat page
-  useEffect(() => {
-    if (loginSuccess) {
-      navigate("/chat");
-    }
-  }, [loginSuccess, navigate]);
 
   return (
     <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">

@@ -3,10 +3,10 @@ import { authStore } from "../Store/authStore";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import FormField from "../Component/FormField"; // input field 
-import Spinner from "../Component/Spinner"; // button loader
+import FormField from "../Component/FormField"; // input field
+import Spinner from "../Component/Loaders/Spinner"; // button loader
 
-import { format } from 'date-fns';  // format user account creation date 
+import { format } from "date-fns"; // format user account creation date
 
 const Setting = () => {
   const {
@@ -18,12 +18,17 @@ const Setting = () => {
     isDeleting,
     deleteUser,
   } = authStore();
+  const [deleteAccountConfirmation, setDeleteAccountConfirmation] =
+    useState("");
   const [status, setStatus] = useState(userAuth?.status || ""); // get user updated status
   const [image, setImage] = useState(null); // get user selected image
 
+  const confirmWord = "Delete my account"; // the only key word to proceed with account deletion
+  const proceedDeletion =
+    deleteAccountConfirmation === confirmWord ? true : false;
+
   // format the date
   const createdDate = userAuth?.createdAt ? new Date(userAuth.createdAt) : null;
-
 
   // handle profile pic change and upload
   const handleProfilePic = (e) => {
@@ -46,8 +51,8 @@ const Setting = () => {
   };
 
   useEffect(() => {
-  setStatus(userAuth?.status || "");
-}, [userAuth?.status]);
+    setStatus(userAuth?.status || "");
+  }, []);
 
   // delete user account
   const handleDelete = () => {
@@ -147,25 +152,65 @@ const Setting = () => {
         <section className="mt-6">
           <div className="flex justify-between text-sm px-2">
             <p>Member since: </p>
-            <p> {createdDate ? format(createdDate, 'MMM yyyy') : 'N/A'}</p>
+            <p> {createdDate ? format(createdDate, "MMM yyyy") : "N/A"}</p>
           </div>
           <div className="flex justify-between text-sm px-2 mt-3">
             <p>Account status: </p>
             <p> Verified ✅</p>
           </div>
+
+          {/** modal pop up to confirm user account deletion */}
+          {/* Open the modal using document.getElementById('ID').showModal() method */}
           <button
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className=" text-sm mt-8 text-red-500 border border-red-500 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition disabled:cursor-not-allowed disabled:opacity-45"
+            className="btn border-red-500 text-red-500 mt-5 text-sm hover:bg-red-500 hover:text-white hover:shadow-inner transition-colors duration-500"
+            onClick={() => document.getElementById("my_modal_1").showModal()}
           >
-            {isDeleting ? (
-              <div className="flex justify-center items-center gap-2">
-                <Spinner /> <p> Deleting Account</p>{" "}
-              </div>
-            ) : (
-              "Delete My Account"
-            )}
+            Delete My Account
           </button>
+          <dialog id="my_modal_1" className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold lg:text-lg text-md text-red-500">
+                Warning! This will permanently delete your account
+              </h3>
+
+              <div className="modal-action">
+                <form method="dialog" className="w-full">
+                  {/* if there is a button in form, it will close the modal */}
+                  <p className="text-sm">
+                    To confirm please type <strong> "Delete my account"</strong>{" "}
+                    in the box below to proceed or press close to go back.
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="Enter 'Delete my account'"
+                    onChange={(e) => {
+                      setDeleteAccountConfirmation(e.target.value);
+                    }}
+                    value={deleteAccountConfirmation}
+                    className="input mt-4 w-full hover:outline-none focus:outline-none"
+                  />
+                  {/** delete and close button */}
+                  <div className="flex justify-between items-center p-2 mt-5">
+                    <button
+                      onClick={handleDelete}
+                      disabled={isDeleting || !proceedDeletion}
+                      className={`text-sm  text-red-500 border border-red-500 px-4 py-2 shadow-lg rounded hover:bg-red-600 hover:text-white transition disabled:cursor-not-allowed disabled:opacity-45 disabled:bg-transparent disabled:text-white`}
+                    >
+                      {isDeleting ? (
+                        <div className="flex justify-center items-center gap-2">
+                          <Spinner /> <p> Deleting Account</p>{" "}
+                        </div>
+                      ) : (
+                        "Yes!, Delete my account"
+                      )}
+                    </button>
+
+                    <button className="btn">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </section>
       </div>
     </div>

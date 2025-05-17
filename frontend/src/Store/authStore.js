@@ -6,6 +6,9 @@ import { toast } from "react-hot-toast";
 
 
 export const authStore = create((set) => ({
+    onlineUsers: [],
+
+    
     //check user auth
     checkingAuth: true,
     userAuth: null,
@@ -13,33 +16,55 @@ export const authStore = create((set) => ({
         try {
             const response = await authAxios.get("/check")
             if (response.status === 200) {
-                console.log("User Authenticated", response.data.user)
+                console.log("User Authenticated store", response.data.user)
                 set({ checkingAuth: false, userAuth: response.data.user })
             }
         } catch (error) {
-            console.log("user not authenticated", error.message)
+            console.log("user not authenticated check store", error.message)
             set({ checkingAuth: false, userAuth: null })
         }
     },
 
     // login 
-    loginSuccess: false,
     logginIn: false,
     login: async (data) => {
         set({ logginIn: true })
         try {
             const response = await authAxios.post("/login", data);
             if (response.status === 200) {
+                // Manually refresh auth state after login
+                await authStore.getState().checkAuth();
                 toast.success(`Welcome back ${response?.data?.user?.userName}`)
-                set({ logginIn: false, loginSuccess: true, userAuth: response.data.user })
             }
 
         } catch (error) {
-            set({ logginIn: false, loginSuccess: false, userAuth: null })
+            set({  userAuth: null })
             if (!error.response)
                 return toast.error("Server currently unavailable please try again later");
             console.log("error in the login store", error.message)
             return toast.error(error.response?.data?.message);
+        } finally {
+            set({ logginIn: false })
+        }
+    },
+
+    // logOut 
+    logout: async () => {
+        try {
+            const response = await authAxios.post("/logout")
+            if (response.status === 200) {
+                set({ userAuth: null, checkingAuth: false })
+                toast.success(response.data?.message || "log out successful bye!");
+                return;
+            }
+            // Handle unexpected response status
+            toast.error("Unexpected response status during logout.");
+        } catch (error) {
+            if (error.response) {
+                return toast.error(error.response?.data?.message || "Server error, log out")
+            } else {
+                return toast.error("An error occurred while logging out.");
+            }
         }
     },
 
@@ -62,26 +87,6 @@ export const authStore = create((set) => ({
             }
             console.log("Error in the register store", error.message)
             return toast.error(error.response?.data?.message || "Unexpected error! 😔");
-        }
-    },
-
-    // logOut 
-    logout: async () => {
-        try {
-            const response = await authAxios.post("/check")
-            if (response.status === 200) {
-                set({ userAuth: null })
-                toast.success(response.data?.message || "log out successful bye!");
-                return;
-            }
-            // Handle unexpected response status
-            toast.error("Unexpected response status during logout.");
-        } catch (error) {
-            if (error.response) {
-                return toast.error(error.response?.data?.message || "Server error, log out")
-            } else {
-                return toast.error("An error occurred while logging out.");
-            }
         }
     },
 

@@ -2,18 +2,17 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormField from "../Component/FormField"; // input field component
 import CustomButton from "../Component/CustomButton"; // create account button
-import Spinner from "../Component/Spinner";
+import Spinner from "../Component/Loaders/Spinner";
 import { authStore } from "../Store/authStore"; // zustand global store
 import { toast } from "react-hot-toast"; // show ui notification
 
-import { isPasswordStrong } from "../Utilis/password.test" // test the user password 
+import { isPasswordStrong } from "../Utilis/password.test"; // test the user password
 import { AnimatePresence, motion as Motion } from "framer-motion";
-import 
-{  UserIcon,
+import {
+  UserIcon,
   EnvelopeIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline"; // icons from heroicons v2
-
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -33,7 +32,13 @@ const SignUpPage = () => {
     if (!data.password) return toast.error("Password is required"), false;
     if (data.password !== data.confirmPassword)
       return toast.error("Passwords do not match"), false;
-    if (!isPasswordStrong(data.password)) return toast.error("Password must be 8+ chars long, with uppercase, lowercase, number & specialCharacter"), false;
+    if (!isPasswordStrong(data.password))
+      return (
+        toast.error(
+          "Password must be 8+ chars long, with uppercase, lowercase, number & specialCharacter"
+        ),
+        false
+      );
     return true;
   };
 
@@ -42,18 +47,18 @@ const SignUpPage = () => {
    * before sending to backend
    * submit user data to backend for authentication
    */
-  
+
   const submitData = (e) => {
     e.preventDefault();
     if (!validation()) return;
 
-    // trim data and send 
-     const cleanedData = {
-    ...data,
-    userName: data.userName.trim(),
-    email: data.email.trim(),
-    password: data.password
-  }
+    // trim data and send
+    const cleanedData = {
+      ...data,
+      userName: data.userName.trim(),
+      email: data.email.trim(),
+      password: data.password,
+    };
     register(cleanedData); // authstore function to send details to backend
   };
   // react to authentication response
