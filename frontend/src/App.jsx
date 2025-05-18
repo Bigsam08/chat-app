@@ -11,7 +11,11 @@ import ChatPage from "./Pages/ChatPage";
 import { authStore } from "./Store/authStore";
 import MainLoader from "./Component/Loaders/MainLoader";
 
+import useThemeStore from "./Store/ThemeStore"; // theme store toggler
+
 const App = () => {
+  const { theme } = useThemeStore();
+
   const userAuth = authStore((state) => state.userAuth);
   const checkingAuth = authStore((state) => state.checkingAuth);
   const checkAuth = authStore((state) => state.checkAuth);
@@ -29,7 +33,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className={`theme-wrapper ${theme}`}>
       <Routes>
         <Route
           path="/"

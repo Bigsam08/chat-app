@@ -23,7 +23,7 @@ const Sidebar = () => {
   const { onlineUsers } = authStore();
 
   return (
-    <aside className="hidden  md:flex p-2  h-[calc(100vh-5rem)] border-r ">
+    <aside className="hidden  md:flex p-2  h-[calc(100vh-5rem)] shadow-lg">
       {/** right contact list */}
       <div className="pl-3">
         <div className="flex items-center gap-2 pt-3 mb-5">
@@ -35,10 +35,10 @@ const Sidebar = () => {
           <input
             type="search"
             placeholder="Search users..."
-            className="w-full px-3 py-2 pl-10 rounded  text-white placeholder-gray-400 focus:outline-none"
+            className="w-full px-3 py-2 pl-10 bg-transparent rounded focus:border-b hover:border-b border-opacity-60 focus:outline-none"
           />
           <svg
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 "
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -56,33 +56,32 @@ const Sidebar = () => {
         {isFetchingUsers ? (
           <SkeletonLoader />
         ) : userFetchError ? (
-          <p className="text-red-400 p-2 text-sm">😔{userFetchError} </p>
+          <p className="text-dim p-2 text-sm">😔{userFetchError} </p>
         ) : allusers.length === 0 ? (
-          <p className="text-gray-400 p-2 text-sm">No users found </p>
+          <p className="text-dim p-2 text-sm">No users found </p>
         ) : (
           <div className="overflow-y-auto w-full">
             {allusers.map((user, idx) => (
               <button
                 onClick={() => setSelectedUser(user)}
                 key={user._id || idx}
-                className={`relative flex gap-4 items-center w-full p-2 mb-3 mt-3  border-b border-gray-800 hover:bg-gray-700 transition-colors ${
+                className={`relative flex gap-4 items-center w-full p-2 mb-3 mt-3  border-b hover:bg-gray-700 transition-colors ${
                   selectedUser?._id === user._id
-                    ? "bg-green-600 rounded-xl"
+                    ? "text-green-500 rounded-sm"
                     : ""
                 }`}
               >
                 <img
                   src={user?.profilePic || "/profile-avatar.png"}
                   alt="user profile pic"
-                  className="relative bg-white rounded-full object-cover size-9 "
+                  className="relative rounded-full object-cover size-9 "
                 />
                 {/** name and online status */}
                 <div>
-                  <p className="text-white text-sm truncate font-bold">
+                  <p className="text-sm truncate font-bold">
                     {user.userName || "Unknown"}
                   </p>
-                  <p className="text-sm font-thin text-gray-300">
-                    {" "}
+                  <p className="text-sm font-thin text-dim">
                     {onlineUsers.includes(user._id) ? "Online" : "Offline"}
                   </p>
                 </div>

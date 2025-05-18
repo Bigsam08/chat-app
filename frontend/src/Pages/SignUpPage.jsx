@@ -163,7 +163,7 @@ const SignUpPage = () => {
       </div>
 
       {/** text */}
-      <div className="hidden md:flex items-center justify-center rounded-2xl shadow-lg md:p-16">
+      <div className="hidden md:flex items-center justify-center rounded-2xl md:p-16">
         <div className="flex flex-col items-center text-center p-6 max-w-md">
           <img
             src="/chat3.svg"
@@ -171,16 +171,16 @@ const SignUpPage = () => {
             className="w-80 h-auto mb-6"
           />
 
-          <h2 className="text-2xl font-semibold text-white mb-3 leading-tight">
+          <h2 className="text-2xl font-semibold mb-3 leading-tight">
             Chat securely and instantly
           </h2>
 
-          <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+          <p className="text-sm text-dim mb-4 leading-relaxed">
             Experience real-time conversations in a fully encrypted, fast, and
             intuitive messaging platform built for modern communication.
           </p>
 
-          <div className="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+          <div className="bg-green-600 text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             🔒 End-to-end encrypted
           </div>
         </div>

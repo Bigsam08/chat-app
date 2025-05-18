@@ -6,10 +6,12 @@
 import { useEffect } from "react";
 import { messageStore } from "../Store/messageStore";
 import ConversationHeader from "./ConversationHeader";
-import ChatSkeletonLoader from "../Component/Loaders/ChatSkeletonLoader"
+import ChatSkeletonLoader from "../Component/Loaders/ChatSkeletonLoader";
+import ChatInput from "../Component/ChatInput";
 
 const ConversationPage = () => {
-  const { isFetchingChats, getChats, chats, selectedUser } = messageStore();
+  // add chats from the msg store
+  const { isFetchingChats, getChats, selectedUser } = messageStore();
 
   // fetch all the user chats
   useEffect(() => {
@@ -17,7 +19,7 @@ const ConversationPage = () => {
   }, [getChats, selectedUser._id]);
 
   return (
-    <div className="flex flex-1 flex-col overflow-auto p-5 w-full md:w-4/5">
+    <div className="flex flex-1 flex-col justify-between min-h-[calc(100vh-7rem)] overflow-auto p-5 w-full md:w-4/5 bg-white/10 backdrop-blur-sm">
       {/** header div */}
       <header>
         <ConversationHeader />
@@ -26,7 +28,9 @@ const ConversationPage = () => {
       {isFetchingChats ? <ChatSkeletonLoader /> : <main>body</main>}
 
       {/** chat input */}
-      <section>input field</section>
+      <section>
+        <ChatInput />
+      </section>
     </div>
   );
 };

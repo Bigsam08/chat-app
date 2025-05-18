@@ -12,7 +12,7 @@ const ConversationHeader = () => {
   const { onlineUsers } = authStore();
 
   return (
-    <div className="border-b p-2.5 border-gray-800">
+    <div className="p-2.5  shadow-lg">
       <div className="flex items-center justify-between">
         {/** user image or dp */}
         <div className="flex items-center gap-3">
@@ -25,8 +25,8 @@ const ConversationHeader = () => {
           </div>
           <div>
             <h3 className="font-medium">{selectedUser.userName}</h3>
-            <p className="text-sm">
-              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}{" "}
+            <p className="text-sm text-dim">
+              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
             </p>
           </div>
         </div>
