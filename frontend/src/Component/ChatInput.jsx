@@ -1,31 +1,121 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { PaperAirplaneIcon, PhotoIcon } from "@heroicons/react/24/outline";
+import { messageStore } from "../Store/messageStore";
+import toast from "react-hot-toast";
 
-const ChatInput = ({ onSend }) => {
+const ChatInput = () => {
+  const { sendMessage } = messageStore();
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
-
-  const handleSend = () => {
+  const [imagePrev, setImagePrev] = useState(null);
+  const fileInputRef = useRef(null);
+  /**
+   * if all error checks out clear
+   * use try catch to send the message and clear states
+   * image state, preview state and message state
+   */
+  const handleSend = async (e) => {
+    e.preventDefault();
     if (!message.trim() && !image) return;
-    onSend({ message, image });
-    setMessage("");
-    setImage(null);
+    try {
+      await sendMessage({
+        text: message.trim(),
+        images: image,
+      });
+      // clear states
+      setMessage("");
+      if (imagePrev) URL.revokeObjectURL(imagePrev);
+      setImage(null);
+      setImagePrev(null);
+    } catch (error) {
+      console.log("failed to send message from input page", error.message);
+    }
+  };
+  /**
+   * checks for nul and if image is file or not
+   * handles the image catch
+   * set the image and also the preview
+   */
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Only image files are allowed");
+      return;
+    }
+
+    //convert to base64
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imagebase64 = reader.result;
+      setImage(imagebase64); // image converted to base64
+    };
+    reader.readAsDataURL(file);
+
+    // Set preview
+    const objectURL = URL.createObjectURL(file);
+    setImagePrev(objectURL);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setImage(file);
+  /**
+   * function to remove preview image if user  changes mind
+   * reset image and preview state back to empty
+   */
+  const handleImageRemove = () => {
+    if (imagePrev) URL.revokeObjectURL(imagePrev);
+    setImage(null);
+    setImagePrev(null);
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
   };
 
   return (
-    <div className="flex items-center p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-      {/* Image selector */}
-      <label className="cursor-pointer mr-3">
+    <div className="relative flex items-center p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      {/* Image Preview */}
+      {imagePrev && (
+        <div className="absolute bottom-full mb-3 flex gap-2 items-center left-0 w-full px-3">
+          <div className="relative">
+            <img
+              src={imagePrev}
+              alt="Image Preview"
+              className="size-12 object-cover rounded-md border"
+            />
+            <button
+              onClick={handleImageRemove}
+              className="absolute -top-1 -right-2"
+            >
+              <XMarkIcon className="size-3 bg-gray-700 rounded text-white" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Trigger File Input via Icon */}
+      <button
+        onClick={triggerFileInput}
+        className="cursor-pointer mr-3"
+        title="Upload Image"
+      >
         <PhotoIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-        <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+      </button>
+
+      {/* Image Input */}
+      <label className="cursor-pointer mr-3">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+          aria-label="Select an image"
+          ref={fileInputRef}
+        />
       </label>
 
-      {/* Text input */}
+      {/* Message Input */}
       <input
         type="text"
         placeholder="Type your message..."
@@ -34,10 +124,11 @@ const ChatInput = ({ onSend }) => {
         className="flex-1 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
       />
 
-      {/* Send button */}
+      {/* Send Button */}
       <button
         onClick={handleSend}
-        className="ml-3 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-full transition"
+        disabled={!message.trim() && !image}
+        className="ml-3 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-full transition disabled:bg-gray-500"
         title="Send"
         aria-label="Send message"
       >

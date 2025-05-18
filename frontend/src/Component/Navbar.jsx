@@ -35,7 +35,7 @@ const Navbar = () => {
       </div>
       {/** right */}
       <div
-        className={`absolute md:relative top-full md:top-0 right-1 z-10  px-5 py-5 md:py-0 md:flex items-center lg:space-x-10 text-sm bg-gray-700 md:bg-transparent rounded-b-md md:rounded-none shadow md:shadow-none space-y-3 md:space-y-0 md:pt-0 transition-all duration-300 ${
+        className={`absolute md:relative top-full md:top-0 right-1 z-10  px-5 py-5 md:py-0 md:flex items-center lg:space-x-10 text-sm  md:bg-transparent rounded-b-md md:rounded-none  shadow-xl md:shadow-none space-y-3 md:space-y-0 md:pt-0 transition-all duration-300 ${
           visible ? "block " : "hidden md:flex"
         }`}
       >
@@ -46,7 +46,7 @@ const Navbar = () => {
           </div>
 
           {/** settings  */}
-          <div className="flex items-center gap-1 px-2 md:bg-green-600">
+          <div className="flex items-center gap-1 px-2">
             <Cog8ToothIcon className="h-6 w-6" />
             <Link to="/settings" className="flex flex-col group">
               Settings
@@ -57,20 +57,23 @@ const Navbar = () => {
           <div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1 md:bg-red-500 px-2 hover:bg-red-800 rounded-sm transition-colors"
+              className="flex items-center gap-1 md:bg-red-500 px-2 hover:bg-red-600 rounded-sm transition-colors"
             >
               <ArrowRightStartOnRectangleIcon className="w-6 h-6" /> Log out
             </button>
           </div>
         </div>
-
-        {/** button  */}
       </div>
 
       {/** mobile menu bar */}
-      <div className="flex items-center md:hidden">
-         <SwitchTheme />
-        <EllipsisVerticalIcon className=" w-7 h-7" onClick={handleVisibility} />
+      <div className="flex items-center gap-2 md:hidden">
+        <SwitchTheme title="Theme"/>
+        <button  title="Menu">
+          <EllipsisVerticalIcon
+            className=" w-7 h-7 hover:scale-75"
+            onClick={handleVisibility}
+          />
+        </button>
       </div>
     </nav>
   );

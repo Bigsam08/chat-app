@@ -18,7 +18,8 @@ const PORT = process.env.PORT
 const app = express();
 
 app.use(cookieParser()) //allows to extract data from inside the cookies
-app.use(express.json()); // get json request and response from user
+app.use(express.json({ limit: '10mb' })); // get json request and response from user
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true

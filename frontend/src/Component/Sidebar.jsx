@@ -65,7 +65,7 @@ const Sidebar = () => {
               <button
                 onClick={() => setSelectedUser(user)}
                 key={user._id || idx}
-                className={`relative flex gap-4 items-center w-full p-2 mb-3 mt-3  border-b hover:bg-gray-700 transition-colors ${
+                className={`relative flex gap-4 items-center w-full p-2 mb-3 mt-3 hover:bg-gray-700 transition-colors ${
                   selectedUser?._id === user._id
                     ? "text-green-500 rounded-sm"
                     : ""

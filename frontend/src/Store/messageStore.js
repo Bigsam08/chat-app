@@ -4,9 +4,9 @@
 
 import { create } from "zustand";
 import userAxios from "../Api/user.axios"
-// import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-export const messageStore = create((set) => ({
+export const messageStore = create((set, get) => ({
     selectedUser: null,
 
     // fetch all users
@@ -43,6 +43,20 @@ export const messageStore = create((set) => ({
     },
 
     // function to set selected user
-    setSelectedUser: (user) => set({ selectedUser: user })
+    setSelectedUser: (user) => set({ selectedUser: user }),
+
+    // send messages 
+    // use zustand get to get the message from user by destructing
+    // selected to get the sender Id
+    sendMessage: async (messageDetails) => {
+        const { selectedUser, chats } = get();
+        try {
+            const response = await userAxios.post(`/send-messages/${selectedUser._id}`, messageDetails);
+            set({ chats: [...chats, response.data]})
+        } catch (error) {
+            console.log("error send msg store", error.message)
+            return toast.error(error.response?.data?.message || "message not sent")
+        } 
+    },
 
 }))

@@ -6,7 +6,7 @@ const { getMessage, getUsers, sendMessage } = require("../Controllers/messageCon
 
 router.get('/all-users', authMiddleware, getUsers); // fetch all users/friends
 router.get('/get-chats/:id', authMiddleware, getMessage); // fetch messages
-router.post('/send-messages/:id', authMiddleware, sendMessage); // send messages
+router.post('/send-messages/:id', authMiddleware, sendMessage); // send messages with the user id passed
 
 
 module.exports = router;

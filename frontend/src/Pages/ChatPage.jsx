@@ -7,9 +7,6 @@ import Navbar from "../Component/Navbar";
 import ChatWelcome from "../Component/ChatWelcome"; // default component for new user
 import ConversationPage from "../Component/ConversationPage";
 
-import { PlusIcon } from "@heroicons/react/24/solid";
-import FloatingButton from "../Component/FloatingButton";
-
 import { messageStore } from "../Store/messageStore";
 
 const ChatPage = () => {
@@ -26,15 +23,6 @@ const ChatPage = () => {
            */}
           {!selectedUser ? <ChatWelcome /> : <ConversationPage />}
         </div>
-      </div>
-
-      {/** Mobile floating contact icon */}
-      <div className="md:hidden fixed bottom-14 right-4 ">
-        <FloatingButton
-          icon={<PlusIcon className="w-8 h-8"/>}
-          text="Start new chat"
-          title="Start new Chat"
-        />
       </div>
     </main>
   );

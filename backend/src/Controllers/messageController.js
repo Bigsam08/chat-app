@@ -1,6 +1,7 @@
 
 const User = require("../Models/User.model");
 const Messages = require("../Models/message.model");
+const cloudinary = require("../Utils/cloudinary");
 
 const getUsers = async (req, res) => {
     try {
