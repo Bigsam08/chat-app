@@ -16,7 +16,6 @@ export const authStore = create((set) => ({
         try {
             const response = await authAxios.get("/check")
             if (response.status === 200) {
-                console.log("User Authenticated store", response.data.user)
                 set({ checkingAuth: false, userAuth: response.data.user })
             }
         } catch (error) {

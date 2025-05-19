@@ -38,7 +38,9 @@ const getMessage = async (req, res) => {
                 { senderId: friendsId, receiverId: myId }
             ],
         })
-            .sort({ createdAt: -1 }) // fetch from newest to oldest
+            .sort({ createdAt: 1 }) // fetch from newest to oldest
+            .populate("senderId", "_id name profilePic") // populate necessary fields
+            .populate("receiverId", "_id name profilePic")
             .exec(); // execute the query like promise
 
         res.status(200).json(messages);
@@ -57,7 +59,7 @@ const sendMessage = async (req, res) => {
 
         // get my id and get sender id
         const myId = req.user._id;
-        const { id: senderId } = req.params;
+        const { id: receiverId } = req.params;
 
         // check if user is sending a text or an image
         let imageUrl;
@@ -68,8 +70,8 @@ const sendMessage = async (req, res) => {
         }
         // if its text
         const newMessage = new Messages({
-            senderId,
-            receiverId: myId,
+            senderId: myId,
+            receiverId: receiverId,
             text,
             images: imageUrl
         })

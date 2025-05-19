@@ -12,12 +12,12 @@ import { messageStore } from "../Store/messageStore";
 const ChatPage = () => {
   const { selectedUser } = messageStore();
   return (
-    <main className="relative flex flex-col min-h-screen ">
+    <main className="relative flex flex-col h-screen ">
       <Navbar />
       {/** Main body screen */}
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-1 overflow-hidden">
           {/*** A dynamic component rendering
            * if user selects a chat display the conversation page dynamically showing end to end messages else show the default homepage
            */}

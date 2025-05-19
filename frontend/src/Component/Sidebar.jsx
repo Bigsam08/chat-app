@@ -56,7 +56,7 @@ const Sidebar = () => {
         {isFetchingUsers ? (
           <SkeletonLoader />
         ) : userFetchError ? (
-          <p className="text-dim p-2 text-sm">😔{userFetchError} </p>
+          <p className="text-dim p-2 text-sm">😔 Error has occured, refresh </p>
         ) : allusers.length === 0 ? (
           <p className="text-dim p-2 text-sm">No users found </p>
         ) : (

@@ -5,7 +5,7 @@ import { messageStore } from "../Store/messageStore";
 import toast from "react-hot-toast";
 
 const ChatInput = () => {
-  const { sendMessage } = messageStore();
+  const { sendMessage, isSendingMessage } = messageStore();
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
   const [imagePrev, setImagePrev] = useState(null);
@@ -28,6 +28,9 @@ const ChatInput = () => {
       if (imagePrev) URL.revokeObjectURL(imagePrev);
       setImage(null);
       setImagePrev(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = null; //  reset input
+      }
     } catch (error) {
       console.log("failed to send message from input page", error.message);
     }
@@ -43,6 +46,13 @@ const ChatInput = () => {
 
     if (!file.type.startsWith("image/")) {
       toast.error("Only image files are allowed");
+      return;
+    }
+
+    // File size check (10MB max)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      toast.error("Image must be less than 10MB");
       return;
     }
 
@@ -75,15 +85,18 @@ const ChatInput = () => {
 
   return (
     <div className="relative flex items-center p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-      {/* Image Preview */}
+      {/* Image Preview  at the top */}
       {imagePrev && (
         <div className="absolute bottom-full mb-3 flex gap-2 items-center left-0 w-full px-3">
           <div className="relative">
             <img
               src={imagePrev}
               alt="Image Preview"
-              className="size-12 object-cover rounded-md border"
+              className={`size-12 object-cover rounded-md border ${
+                isSendingMessage ? "animate-pulse" : ""
+              }`}
             />
+
             <button
               onClick={handleImageRemove}
               className="absolute -top-1 -right-2"
@@ -116,24 +129,49 @@ const ChatInput = () => {
       </label>
 
       {/* Message Input */}
-      <input
-        type="text"
-        placeholder="Type your message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className="flex-1 px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-      />
-
-      {/* Send Button */}
-      <button
-        onClick={handleSend}
-        disabled={!message.trim() && !image}
-        className="ml-3 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-full transition disabled:bg-gray-500"
-        title="Send"
-        aria-label="Send message"
+      <form
+        onSubmit={handleSend}
+        className="flex flex-1 items-center justify-between"
       >
-        <PaperAirplaneIcon className="w-5 h-5 rotate-45" />
-      </button>
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          disabled={isSendingMessage}
+          className={`flex-1 px-4 py-2 rounded-md border ${
+            isSendingMessage
+              ? "bg-gray-100 dark:bg-gray-600 cursor-not-allowed"
+              : "border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          } dark:text-white`}
+        />
+        {/* Send Button */}
+        <button
+          type="submit"
+          disabled={(!message.trim() && !image) || isSendingMessage}
+          className={`ml-3 p-2 rounded-full transition ${
+            isSendingMessage
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
+          } `}
+          title={isSendingMessage ? "Sending…" : "Send"}
+        >
+          {isSendingMessage ? (
+            <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="white"
+                strokeWidth="4"
+                fill="none"
+              />
+            </svg>
+          ) : (
+            <PaperAirplaneIcon className="w-5 h-5 rotate-45 text-white" />
+          )}
+        </button>
+      </form>
     </div>
   );
 };

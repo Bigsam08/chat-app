@@ -25,6 +25,7 @@ const checkAuth = async (req, res) => {
         //send the user details gotten from inside the cookies id
         res.status(200).json({
             user: {
+                id: req.user._id,
                 email: req.user.email,
                 userName: req.user.userName,
                 profilePic: req.user.profilePic,
@@ -105,6 +106,7 @@ const login = async (req, res) => {
         return res.status(200).json({
             message: "Authentication Successful!",
             user: {
+                id: checkUser._id,
                 email: checkUser.email,
                 userName: checkUser.userName,
                 profilePic: checkUser.profilePic,

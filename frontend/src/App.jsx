@@ -24,10 +24,6 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
-   useEffect(() => {
-    console.log("Current userAuth app.js:", userAuth);
-  }, [userAuth]);
-
   if (checkingAuth) {
     return <MainLoader />;
   }

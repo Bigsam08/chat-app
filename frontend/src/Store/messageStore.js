@@ -48,15 +48,19 @@ export const messageStore = create((set, get) => ({
     // send messages 
     // use zustand get to get the message from user by destructing
     // selected to get the sender Id
+    isSendingMessage: false,
     sendMessage: async (messageDetails) => {
+        set({ isSendingMessage: true })
         const { selectedUser, chats } = get();
         try {
             const response = await userAxios.post(`/send-messages/${selectedUser._id}`, messageDetails);
-            set({ chats: [...chats, response.data]})
+            set({ chats: [...chats, response.data] })
         } catch (error) {
             console.log("error send msg store", error.message)
             return toast.error(error.response?.data?.message || "message not sent")
-        } 
+        } finally {
+            set({ isSendingMessage: false })
+        }
     },
 
 }))
