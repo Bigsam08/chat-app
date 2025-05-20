@@ -2,6 +2,7 @@
 const User = require("../Models/User.model");
 const Messages = require("../Models/message.model");
 const cloudinary = require("../Utils/cloudinary");
+const { getReceiverSocketId, io } = require("../Utils/socketServer")
 
 const getUsers = async (req, res) => {
     try {
@@ -76,6 +77,17 @@ const sendMessage = async (req, res) => {
             images: imageUrl
         })
         await newMessage.save();
+
+        // after saving to db fetch the receiver id and send it to the  socket util function
+        // passing it as argument in the getReceiverId
+
+        const receiverSocketId = getReceiverSocketId(receiverId)
+        if (receiverSocketId) {
+
+            // notify only the receiver and not all contact
+            io.to(receiverSocketId).emit("newMessage", newMessage)
+        }
+
         res.status(201).json(newMessage);
 
         // re
