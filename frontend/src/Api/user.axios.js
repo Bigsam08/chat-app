@@ -5,7 +5,7 @@
 import axios from "axios";
 
  const userAxios = axios.create({
-    baseURL: "http://localhost:5001/api/",
+    baseURL: import.meta.env.VITE_MESSAGE_API,
     withCredentials: true
 });
 export default userAxios;

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 
 import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
@@ -27,7 +27,7 @@ const App = () => {
   if (checkingAuth) {
     return <MainLoader />;
   }
-
+ 
   return (
     <div className={`theme-wrapper ${theme}`}>
       <Routes>

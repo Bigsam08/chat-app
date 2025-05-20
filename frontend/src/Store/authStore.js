@@ -3,12 +3,14 @@
 import { create } from "zustand";
 import { authAxios } from "../Api/auth.axios"; // auth api request
 import { toast } from "react-hot-toast";
+import { io } from "socket.io-client";
 
 
-export const authStore = create((set) => ({
+export const authStore = create((set, get) => ({
     onlineUsers: [],
+    socket: null,
 
-    
+
     //check user auth
     checkingAuth: true,
     userAuth: null,
@@ -17,6 +19,7 @@ export const authStore = create((set) => ({
             const response = await authAxios.get("/check")
             if (response.status === 200) {
                 set({ checkingAuth: false, userAuth: response.data.user })
+                get().socketConnection()
             }
         } catch (error) {
             console.log("user not authenticated check store", error.message)
@@ -34,10 +37,11 @@ export const authStore = create((set) => ({
                 // Manually refresh auth state after login
                 await authStore.getState().checkAuth();
                 toast.success(`Welcome back ${response?.data?.user?.userName}`)
+                get().socketConnection()
             }
 
         } catch (error) {
-            set({  userAuth: null })
+            set({ userAuth: null })
             if (!error.response)
                 return toast.error("Server currently unavailable please try again later");
             console.log("error in the login store", error.message)
@@ -54,6 +58,7 @@ export const authStore = create((set) => ({
             if (response.status === 200) {
                 set({ userAuth: null, checkingAuth: false })
                 toast.success(response.data?.message || "log out successful bye!");
+                get().socketDisconnection()
                 return;
             }
             // Handle unexpected response status
@@ -161,5 +166,27 @@ export const authStore = create((set) => ({
         }
     },
 
+    // socket connection
+    socketConnection: () => {
+        const { userAuth } = get();
+        if (!userAuth || get().socket?.connected) return;
+
+        const socket = io(import.meta.env.VITE_BACKEND_URL, {
+            query: {
+                userId: userAuth.id,
+            },
+        })
+        socket.connect()
+
+        set({ socket: socket })
+        socket.on("getOnlineUsers", (userIds) => {
+            set({ onlineUsers: userIds})
+        })
+    },
+
+    
+    socketDisconnection: () => {
+        if (get().socket?.connected) get().socket.disconnect();
+    }
 
 }));

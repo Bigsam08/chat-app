@@ -13,7 +13,14 @@ import { format } from "date-fns";
 
 const ConversationPage = () => {
   // add chats from the msg store
-  const { isFetchingChats, getChats, chats, selectedUser } = messageStore();
+  const {
+    isFetchingChats,
+    getChats,
+    chats,
+    selectedUser,
+    getNewMessages,
+    offlineMessages,
+  } = messageStore();
   const { userAuth } = authStore(); // get my id
 
   const bottomRef = useRef(null);
@@ -21,7 +28,10 @@ const ConversationPage = () => {
   // fetch all the user chats
   useEffect(() => {
     getChats(selectedUser._id);
-  }, [getChats, selectedUser._id]);
+    getNewMessages();
+
+    return () => offlineMessages();
+  }, [getChats, selectedUser._id, offlineMessages, getNewMessages]);
 
   // Scroll to bottom when chats change
   useEffect(() => {
@@ -47,7 +57,7 @@ const ConversationPage = () => {
           </div>
         ) : (
           chats.map((message) => {
-            const myMessage = message.senderId._id === (userAuth.id);
+            const myMessage = message.senderId._id === userAuth.id;
             return (
               <div
                 key={message._id}
@@ -55,7 +65,7 @@ const ConversationPage = () => {
                   myMessage ? "chat-end" : "chat-start"
                 } p-2 border-gray-800 border`}
               >
-                {/** chat image avatr  */}
+                {/** chat image avatar  */}
                 <div className="chat-image avatar">
                   <div className="size-10 border rounded-full">
                     <img
@@ -79,7 +89,11 @@ const ConversationPage = () => {
                 </div>
 
                 {/** chat bubble */}
-                <div className={`chat-bubble flex flex-col text-sm ${myMessage ? "bg-green-600" : ""}`}>
+                <div
+                  className={`chat-bubble flex flex-col text-sm ${
+                    myMessage ? "bg-green-600" : ""
+                  }`}
+                >
                   {message.images && (
                     <img
                       src={message.images}
