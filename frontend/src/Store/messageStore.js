@@ -73,7 +73,7 @@ export const messageStore = create((set, get) => ({
         const socket = authStore.getState().socket;
         socket.on("newMessage", (newMessage) => {
             
-            const isMsgFromSelectedUser = newMessage.senderId === selectedUser._id
+            const isMsgFromSelectedUser = newMessage.senderId._id === selectedUser._id
             if (!isMsgFromSelectedUser) return;
             
             set({ chats: [...get().chats, newMessage] })
@@ -83,6 +83,17 @@ export const messageStore = create((set, get) => ({
     offlineMessages: () => {
         const socket = authStore.getState().socket;
         socket.off("newMessage");
+    },
+
+    // filter for the search bar
+    searchSpecificUser: async (query) => {
+        try {
+            const response = await userAxios.get("/search-user", {params : { query : query}})
+            set({ filterUser: response.data})
+        } catch (error) {
+            set({ filterUser: !error.response ? "Server unavailable try later" : error.response.data.message })
+        }
+        
     }
 
 }))

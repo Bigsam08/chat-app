@@ -87,7 +87,7 @@ const sendMessage = async (req, res) => {
             // notify only the receiver and not all contact
             io.to(receiverSocketId).emit("newMessage", newMessage)
         }
-
+        await newMessage.populate("senderId", "_id profilePic");
         res.status(201).json(newMessage);
 
         // re
@@ -98,4 +98,26 @@ const sendMessage = async (req, res) => {
     }
 }
 
-module.exports = { getMessage, getUsers, sendMessage };
+const searchUser = async (req, res) => {
+    try {
+        const query = req.query.query; // get the searched user via req query
+
+        if (!query) return res.status(400).json({ message: "Query is required" });
+
+        const user = await User.find({
+            userName: { $regex: query, $options: 'i' }
+        }).select("-password")
+
+        // chek if the user searched for doesnt exist send this message
+        if (user.length === 0) {
+            return res.status(400).json({ message: "No user found" })
+        }
+        // else send the user
+        return res.status(200).json(user);
+    } catch (error) {
+        console.log("Search error:", error.message);
+        return res.status(500).json({ error: "Server error" });
+    }
+}
+
+module.exports = { getMessage, getUsers, sendMessage, searchUser };

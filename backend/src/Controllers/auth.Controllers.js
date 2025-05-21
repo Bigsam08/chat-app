@@ -54,6 +54,12 @@ const register = async (req, res) => {
             return res.status(400).json({ message: "Email already exists" });
         }
 
+        // cheeck if userName exist already
+        const checkUserName = await User.findOne({ userName }); {
+            if (checkUserName) return res.status(400).json({ message: "User name has been taken" })
+        }
+
+
         // confirm password is greater than 8 characters long
         if (password.length < 8) {
             return res.status(400).json({ message: "Password must be at least 8 characters" });
