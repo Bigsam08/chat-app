@@ -31,7 +31,7 @@ const Navbar = () => {
       {/** logo */}
       <div className="flex gap-1 items-center justify-center">
         {/* <img src="/logopng.png" alt="cht logo" className="w" /> */}
-        <h1 className=" text-xl md:text-2xl font-bold"> Q chat</h1>
+        <h1 className=" text-xl md:text-2xl font-bold logo-font"> Q chat</h1>
       </div>
       {/** right */}
       <div

@@ -5,6 +5,13 @@
 * {
   font-family: "Comfortaa", sans-serif;
 }
+
+.logo-font {
+   font-family: "League Spartan", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
 /* Tailwind CSS for autofill handling */
 input:-webkit-autofill {
   background-color: #111827 !important; /* Tailwind bg-gray-900 */

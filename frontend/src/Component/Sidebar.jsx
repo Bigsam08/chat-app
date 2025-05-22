@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { messageStore } from "../Store/messageStore";
 import SkeletonLoader from "./Loaders/SkeletonLoader";
 import { authStore } from "../Store/authStore";
@@ -12,15 +12,41 @@ const Sidebar = () => {
     userFetchError,
     selectedUser,
     setSelectedUser,
+    searchingUser,
+    searchResult,
+    searchSpecificUser,
   } = messageStore();
 
-  // on load fetch all users in db
+  // Array to display online users
+  const { onlineUsers } = authStore();
+  const [searchedUser, setSearchedUser] = useState(""); // get the user search input
+
+  // on load fetch all users on load
   useEffect(() => {
     getAllUsers();
   }, [getAllUsers]);
 
-  // Array to display online users
-  const { onlineUsers } = authStore();
+  // filtered search handle search logic
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      // checks if there is a change in the search state
+      // run the api call
+      if (searchedUser.trim()) {
+        searchSpecificUser(searchedUser.trim());
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchedUser, searchSpecificUser]);
+
+  /**
+   * creates a variable that stores dynamically either the search
+   * results or the full contact
+   * if the search field inout excluding spaces is empty ? show all users
+   * else if search field has input  show result of search
+   */
+
+  const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
 
   return (
     <aside className="hidden  md:flex p-2  h-[calc(100vh-5rem)] shadow-lg">
@@ -34,6 +60,8 @@ const Sidebar = () => {
         <div className="relative p-2">
           <input
             type="search"
+            value={searchedUser}
+            onChange={(e) => setSearchedUser(e.target.value)}
             placeholder="Search users..."
             className="w-full px-3 py-2 pl-10 bg-transparent rounded focus:border-b hover:border-b border-opacity-60 focus:outline-none"
           />
@@ -53,15 +81,15 @@ const Sidebar = () => {
           </svg>
         </div>
 
-        {isFetchingUsers ? (
+        {isFetchingUsers || searchingUser ? (
           <SkeletonLoader />
         ) : userFetchError ? (
-          <p className="text-dim p-2 text-sm">😔 Error has occured, refresh </p>
-        ) : allusers.length === 0 ? (
+          <p className="text-dim p-2 text-sm">😔 Error has occurred, refresh </p>
+        ) : displayUsers.length === 0 ? (
           <p className="text-dim p-2 text-sm">No users found </p>
         ) : (
           <div className="overflow-y-auto w-full">
-            {allusers.map((user, idx) => (
+            {displayUsers.map((user, idx) => (
               <button
                 onClick={() => setSelectedUser(user)}
                 key={user._id || idx}
