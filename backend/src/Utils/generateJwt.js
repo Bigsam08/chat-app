@@ -15,9 +15,9 @@ const createJwt = (userId, res) => {
     const isProduction = process.env.NODE_ENV === "production";
     res.cookie("jwt", token, {
         maxAge: 7 * 24 * 60 * 60 * 1000, // convert 7 days to milliseconds
-        sameSite: isProduction, //  Cross-site request forgery attack
+        sameSite: isProduction ? "none" : "lax", //  Cross-site request forgery attack
         httpOnly: true, // This will prevent XSS attack Crosssite Script Attack
-        secure: isProduction // Use secure cookies in production
+        secure: isProduction// Use secure cookies in production
     });
 
     return token;
