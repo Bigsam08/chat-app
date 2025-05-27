@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { messageStore } from "../Store/messageStore";
-import SkeletonLoader from "./Loaders/SkeletonLoader";
+import SkeletonLoader from "../Component/Loaders/SkeletonLoader";
 import { authStore } from "../Store/authStore";
 import { UsersIcon } from "@heroicons/react/24/outline";
 
@@ -49,7 +49,7 @@ const Sidebar = () => {
   const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
 
   return (
-    <aside className="hidden  md:flex p-2  h-[calc(100vh-5rem)] shadow-lg">
+    <aside className="hidden md:flex pt-2 h-[calc(100vh-6rem)] shadow-lg rounded-xl m-2 bg-left-side">
       {/** right contact list */}
       <div className="pl-3">
         <div className="flex items-center gap-2 pt-3 mb-5">
@@ -93,9 +93,10 @@ const Sidebar = () => {
               <button
                 onClick={() => setSelectedUser(user)}
                 key={user._id || idx}
-                className={`relative flex gap-4 items-center w-full p-2 mb-3 mt-3 hover:bg-gray-700 transition-colors ${
+                className={`relative flex gap-4 items-center w-full p-2 mb-4 mt-3 shadow-lg hover:scale-95 rounded-xl transition-colors ease-in-out duration-300
+                   ${
                   selectedUser?._id === user._id
-                    ? "text-green-500 rounded-sm"
+                    ? "hover-left"
                     : ""
                 }`}
               >
@@ -115,7 +116,7 @@ const Sidebar = () => {
                 </div>
                 {/** online indicator */}
                 <div
-                  className={`absolute size-3 rounded-full top-3 left-9 ${
+                  className={`absolute size-3 rounded-full bottom-3 left-9 ${
                     onlineUsers.includes(user._id)
                       ? "bg-green-500"
                       : "bg-gray-400"

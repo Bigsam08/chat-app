@@ -84,7 +84,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="relative flex items-center p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+    <div className="relative flex items-center p-3 input-bg shadow-lg rounded-xl">
       {/* Image Preview  at the top */}
       {imagePrev && (
         <div className="absolute bottom-full mb-3 flex gap-2 items-center left-0 w-full px-3">
@@ -141,8 +141,8 @@ const ChatInput = () => {
           disabled={isSendingMessage}
           className={`flex-1 px-4 py-2 rounded-md border ${
             isSendingMessage
-              ? "bg-gray-100 dark:bg-gray-600 cursor-not-allowed"
-              : "border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              ? "bg-gray-100 cursor-not-allowed"
+              : "border-gray-300 bg-black focus:outline-none focus:ring-2 focus:ring-purple-500"
           } dark:text-white`}
         />
         {/* Send Button */}

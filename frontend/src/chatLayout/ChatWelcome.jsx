@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 import FloatingButton from "../Component/FloatingButton";
-import SkeletonLoader from "./Loaders/SkeletonLoader";
+import SkeletonLoader from "../Component/Loaders/SkeletonLoader";
 
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -60,7 +60,7 @@ const ChatWelcome = () => {
     setDisplayContact(!displayContact);
   };
   return (
-    <div className="relative h-screen flex justify-center items-center w-full md:w-4/5">
+    <div className="relative h-screen flex flex-1 justify-center items-center">
       <div className="text-center space-y-5 px-3 max-w-md mx-auto">
         <ChatBubbleLeftRightIcon
           className="h-32 w-32  mx-auto animate-bounce"

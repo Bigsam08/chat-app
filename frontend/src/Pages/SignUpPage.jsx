@@ -101,7 +101,7 @@ const SignUpPage = () => {
             <form onSubmit={submitData} className="space-y-4">
               <FormField
                 name="userName"
-                label="user name"
+                label="User name"
                 placeholder="johndoe2"
                 type="text"
                 onChange={(e) => setData({ ...data, userName: e.target.value })}
@@ -155,7 +155,7 @@ const SignUpPage = () => {
                 to="/"
                 className="hover:text-gray-900 transition-colors duration-200"
               >
-                Back to login
+                &lt; Back to login
               </Link>
             </div>
           </Motion.div>

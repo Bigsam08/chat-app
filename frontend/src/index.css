@@ -7,7 +7,7 @@
 }
 
 .logo-font {
-   font-family: "League Spartan", sans-serif;
+  font-family: "League Spartan", sans-serif;
   font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal;
@@ -32,17 +32,23 @@ input:-webkit-autofill:focus {
   --text-dim: #cbd5e0; /* gray-400*/
   --border-main: #fff;
   --border-dim: #cbd5e0; /* gray-400*/
+  --bg-left-side: #4c1d75; /* purple 900 */
+  --hover-left: #111827;
+  --chat-bubble-bg: linear-gradient(to right, #3b82f6, #8b5cf6);
+  --input-bg: #581c87;
 }
 
 /**
 * light theme settings
 */
 .snow {
-  --bg-main: #fffafa; /* snow white*/
+  --bg-main: #e5e7eb; /* snow white*/
   --text-main: #111827; /* black */
   --text-dim: #6b7280; /* gray-500*/
   --border-main: #000; /* black */
-  --border-dim: #6b7280;
+  --bg-left-side: #e5e7eb; /* gray 200 */
+  --hover-left: #9ca3af; /* gray 400 */
+  --input-bg: #fff;
 }
 /**
 * darkie theme
@@ -51,9 +57,11 @@ input:-webkit-autofill:focus {
   --bg-main: #111827; /* gray-900 */
   --text-main: #f9fafb; /* gray-50 */
   --text-dim: #9ca3af; /* gray-400 */
-  --border-main: #fff; /* gray-700 */
   --border-dim: #4b5563; /* gray-600 */
   --accent: #8b5cf6; /* violet-500 */
+  --bg-left-side: #1f2937; /* gray 800 */
+  --hover-left: #111827; /* gray-900 */
+  --input-bg: #111827;
 }
 
 .theme-wrapper {
@@ -71,13 +79,25 @@ input:-webkit-autofill:focus {
 .border-dim {
   border-color: var(--border-dim);
 }
+.bg-left-side {
+  background-color: var(--bg-left-side);
+}
+.hover-left {
+  background-color: var(--hover-left);
+}
+.chat-bubble-bg {
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+}
+.input-bg {
+  background-color: var(--input-bg)
+}
 
 .bg-custom {
-   background: linear-gradient(
+  background: linear-gradient(
     to bottom right,
-    #6b21a8,  /* purple-700 */
-    #9333ea,  /* purple-600 */
-    #6b21a8   /* purple-700 again */
+    #6b21a8,
+    /* purple-700 */ #9333ea,
+    /* purple-600 */ #6b21a8 /* purple-700 again */
   );
 }
 

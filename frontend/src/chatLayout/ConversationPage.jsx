@@ -5,7 +5,7 @@
 
 import { useRef, useEffect } from "react";
 import { messageStore } from "../Store/messageStore";
-import ConversationHeader from "./ConversationHeader";
+import ConversationHeader from "../Component/ConversationHeader";
 import ChatSkeletonLoader from "../Component/Loaders/ChatSkeletonLoader";
 import ChatInput from "../Component/ChatInput";
 import { authStore } from "../Store/authStore";
@@ -39,7 +39,7 @@ const ConversationPage = () => {
   }, [chats]);
 
   return (
-    <div className="flex flex-1 flex-col justify-between min-h-0 p-5 w-full md:w-4/5 bg-white/10 backdrop-blur-sm">
+    <div className="flex flex-1 flex-col justify-between rounded-xl  h-[calc(100vh-6rem)] mt-2 min-h-0 p-5 backdrop-blur-sm">
       {/** header div */}
       <header>
         <ConversationHeader />
@@ -63,7 +63,7 @@ const ConversationPage = () => {
                 key={message._id}
                 className={`chat ${
                   myMessage ? "chat-end" : "chat-start"
-                } p-2 border-gray-800 border`}
+                } p-2 `}
               >
                 {/** chat image avatar  */}
                 <div className="chat-image avatar">
@@ -91,7 +91,7 @@ const ConversationPage = () => {
                 {/** chat bubble */}
                 <div
                   className={`chat-bubble flex flex-col text-sm ${
-                    myMessage ? "bg-green-600" : ""
+                    myMessage ? "chat-bubble-bg rounded-xl" : "rounded-xl"
                   }`}
                 >
                   {message.images && (

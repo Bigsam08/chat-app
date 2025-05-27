@@ -57,7 +57,7 @@ const Navbar = () => {
           <div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1 md:bg-red-500 px-2 hover:bg-red-600 rounded-sm transition-colors"
+              className="flex items-center gap-1 px-2 hover:text-red-600 rounded-sm transition-colors"
             >
               <ArrowRightStartOnRectangleIcon className="w-6 h-6" /> Log out
             </button>
