@@ -18,7 +18,7 @@ const SwitchTheme = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-5 w-40 px-1 rounded-md shadow-lg bg-white/10 backdrop-blur-md z-50">
+        <div className="absolute right-0 mt-5 w-40 px-1 rounded-md shadow-lg bg-left-side backdrop-blur-md z-50">
           <ul className="py-1">
             {themes.map((t) => (
               <li key={t}>

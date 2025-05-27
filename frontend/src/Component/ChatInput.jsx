@@ -84,7 +84,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="relative flex items-center p-3 input-bg shadow-lg rounded-xl">
+    <div className="relative flex items-center p-3 input-bg shadow-lg rounded-xl bg-chat">
       {/* Image Preview  at the top */}
       {imagePrev && (
         <div className="absolute bottom-full mb-3 flex gap-2 items-center left-0 w-full px-3">

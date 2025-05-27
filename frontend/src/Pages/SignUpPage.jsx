@@ -70,24 +70,24 @@ const SignUpPage = () => {
   }, [registrationSuccess, navigate]);
 
   return (
-    <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">
+    <div className="grid md:grid-cols-2 md:p-5 p-2 h-screen w-full bg-custom">
       {/** form */}
-      <div className="relative flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
+      <div className="relative flex flex-col justify-center items-center px-4 md:px-10 py-5 gap-3">
         <AnimatePresence>
           <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, ease: "easeInOut" }}
-            className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-10"
+            className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-4 md:p-10"
           >
             {/* Logo/Title */}
             <div className="flex justify-center">
-              <img src="/chatlogo.png" alt="Q chat logo" className="h-64" />
+              <img src="/chatlogo.png" alt="Q chat logo" className="h-52" />
             </div>
 
             {/* Welcome Message */}
-            <p className="text-center text-base text-gray-600 mt-3  font-sans font-extrabold">
+            <p className="text-center text-base text-gray-600   font-sans font-extrabold">
               Create account
               <span className="inline-block animate-bounce text-2xl ml-1">
                 😀
@@ -98,7 +98,7 @@ const SignUpPage = () => {
             </p>
 
             {/* Form */}
-            <form onSubmit={submitData} className="space-y-4">
+            <form onSubmit={submitData} className="space-y-3">
               <FormField
                 name="userName"
                 label="User name"
@@ -143,11 +143,12 @@ const SignUpPage = () => {
                 text="Create Account"
                 loadingText="Creating account..."
                 loadingComponent={<Spinner />}
+                className="mt-4"
               />
             </form>
 
             {/* Divider */}
-            <hr className="my-6 border-gray-200" />
+            <hr className="my-3 border-gray-200" />
 
             {/* Links */}
             <div className="text-sm flex justify-center px-2 text-gray-500">
@@ -160,7 +161,7 @@ const SignUpPage = () => {
             </div>
           </Motion.div>
         </AnimatePresence>
-        <section className="absolute bottom-5 text-xs">
+        <section className="text-xs">
           <p>
             app developed by Agbebi Oluwashola ©️ {new Date().getFullYear()}{" "}
           </p>
@@ -168,12 +169,12 @@ const SignUpPage = () => {
       </div>
 
       {/** text */}
-      <div className="hidden md:flex items-center justify-center rounded-2xl md:p-16">
+      <div className="hidden md:flex items-center justify-center rounded-2xl shadow-2xl">
         <div className="flex flex-col items-center text-center p-6 max-w-md">
           <img
             src="/chat3.svg"
             alt="Secure chat image"
-            className="w-80 h-auto mb-6"
+            className="h-auto mb-6"
           />
 
           <h2 className="text-2xl font-semibold mb-3 leading-tight">

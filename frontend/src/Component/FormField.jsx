@@ -22,9 +22,9 @@ const FormField = ({
   };
 
   return (
-    <div className="form-control w-full mb-4">
+    <div className="form-control w-full">
       <label htmlFor={inputId} className="label">
-        <span className={`label-text text-base font-medium ${labelColor}`}>
+        <span className={`label-text text-xs sm:text-base font-medium ${labelColor}`}>
           {label}
         </span>
       </label>
@@ -41,7 +41,7 @@ const FormField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`input input-bordered w-full focus:outline-none ${
+          className={`input input-bordered rounded-xl w-full focus:outline-none text-xs sm:text-sm ${
             readOnly ? "bg-gray-700 text-gray-400 italic" : "bg-gray-900"
           } ${
             icon ? "pl-10" : "pl-4"

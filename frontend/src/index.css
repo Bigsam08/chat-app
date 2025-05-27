@@ -36,6 +36,8 @@ input:-webkit-autofill:focus {
   --hover-left: #111827;
   --chat-bubble-bg: linear-gradient(to right, #3b82f6, #8b5cf6);
   --input-bg: #581c87;
+  --bg-chat: url("/purple-bg.jpg");
+
 }
 
 /**
@@ -49,6 +51,7 @@ input:-webkit-autofill:focus {
   --bg-left-side: #e5e7eb; /* gray 200 */
   --hover-left: #9ca3af; /* gray 400 */
   --input-bg: #fff;
+  --bg-chat: url("/chatwhite.jpg");
 }
 /**
 * darkie theme
@@ -62,6 +65,7 @@ input:-webkit-autofill:focus {
   --bg-left-side: #1f2937; /* gray 800 */
   --hover-left: #111827; /* gray-900 */
   --input-bg: #111827;
+  --bg-chat: url("/chattybg.jpg");
 }
 
 .theme-wrapper {
@@ -90,6 +94,12 @@ input:-webkit-autofill:focus {
 }
 .input-bg {
   background-color: var(--input-bg)
+}
+.bg-chat {
+  background-image: var(--bg-chat);
+}
+.bg-main{
+  background-color: var(--bg-main)
 }
 
 .bg-custom {

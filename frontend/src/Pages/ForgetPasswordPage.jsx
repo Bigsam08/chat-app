@@ -21,9 +21,9 @@ const ForgetPasswordPage = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">
+    <div className="grid md:grid-cols-2 md:p-5 p-2 h-screen w-full bg-custom">
       {/** form */}
-      <div className="relative flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
+      <div className="relative flex justify-center items-center px-4 md:px-10 py-10">
         <AnimatePresence>
           <Motion.div
             initial={{ opacity: 0 }}
@@ -85,12 +85,12 @@ const ForgetPasswordPage = () => {
       </div>
 
       {/** text */}
-      <div className="hidden md:flex items-center justify-center rounded-2xl md:p-16">
+      <div className="hidden md:flex items-center justify-center rounded-2xl shadow-2xl">
         <div className="flex flex-col items-center text-center p-6 max-w-md">
           <img
             src="/chat3.svg"
             alt="Secure chat image"
-            className="w-80 h-auto mb-6"
+            className="h-auto mb-6"
           />
 
           <h2 className="text-2xl font-semibold mb-3 leading-tight">

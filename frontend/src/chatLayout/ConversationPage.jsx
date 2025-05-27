@@ -39,13 +39,13 @@ const ConversationPage = () => {
   }, [chats]);
 
   return (
-    <div className="flex flex-1 flex-col justify-between rounded-xl  h-[calc(100vh-6rem)] mt-2 min-h-0 p-5 backdrop-blur-sm">
+    <div className="flex flex-1 flex-col justify-between rounded-xl mt-2 min-h-0 backdrop-blur-sm">
       {/** header div */}
       <header>
         <ConversationHeader />
       </header>
       {/** messages div */}
-      <main className="flex flex-col flex-1 min-h-0 overflow-y-auto space-y-2 p-2 hide-scrollbar">
+      <main className="flex flex-col flex-1 min-h-0 overflow-y-auto space-y-2 p-2 hide-scrollbar bg-chat">
         {isFetchingChats ? (
           <ChatSkeletonLoader />
         ) : chats.length === 0 ? (
@@ -90,8 +90,8 @@ const ConversationPage = () => {
 
                 {/** chat bubble */}
                 <div
-                  className={`chat-bubble flex flex-col text-sm ${
-                    myMessage ? "chat-bubble-bg rounded-xl" : "rounded-xl"
+                  className={`chat-bubble flex flex-col text-md ${
+                    myMessage ? "chat-bubble-bg rounded-xl" : " bg-gray-400 rounded-xl"
                   }`}
                 >
                   {message.images && (

@@ -5,7 +5,7 @@ const MyRightSideProfile = () => {
   const { userAuth } = authStore();
   const createdDate = userAuth?.createdAt ? new Date(userAuth.createdAt) : null;
   return (
-    <div className="w-full px-4 py-1">
+    <div className="w-full lg:px-1 xl:px-12 py-1">
       <div className="space-y-4 bg-left-side p-4 rounded-xl">
         <div className="flex items-center justify-center space-x-4 p-4">
           <img

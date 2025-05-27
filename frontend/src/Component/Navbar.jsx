@@ -35,7 +35,7 @@ const Navbar = () => {
       </div>
       {/** right */}
       <div
-        className={`absolute md:relative top-full md:top-0 right-1 z-10  px-5 py-5 md:py-0 md:flex items-center lg:space-x-10 text-sm  md:bg-transparent rounded-b-md md:rounded-none  shadow-xl md:shadow-none space-y-3 md:space-y-0 md:pt-0 transition-all duration-300 ${
+        className={`absolute md:relative top-full md:top-0 right-1 z-10  px-5 py-5 md:py-0 md:flex items-center lg:space-x-10 text-sm bg-main  md:bg-transparent rounded-b-md md:rounded-none  shadow-xl md:shadow-none space-y-3 md:space-y-0 md:pt-0 transition-all duration-300 ${
           visible ? "block " : "hidden md:flex"
         }`}
       >

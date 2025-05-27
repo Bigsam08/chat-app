@@ -25,9 +25,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">
+    <div className="grid md:grid-cols-2 md:p-5 p-2 h-screen w-full bg-custom">
       {/** form */}
-      <div className="relative flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
+      <div className="relative flex justify-center items-center px-4 md:px-10 py-10">
         <AnimatePresence>
           <Motion.div
             initial={{ opacity: 0 }}
@@ -38,7 +38,7 @@ const LoginPage = () => {
           >
             {/* Logo/Title */}
             <div className="flex justify-center">
-              <img src="/chatlogo.png" alt="Q chat logo" className="" />
+              <img src="/chatlogo.png" alt="Q chat logo" className="h-60" />
             </div>
 
             {/* Welcome Message */}
@@ -85,7 +85,7 @@ const LoginPage = () => {
             <hr className="my-6 border-gray-200" />
 
             {/* Links */}
-            <div className="text-sm flex justify-between px-2 text-gray-500">
+            <div className="text-xs md:text-sm flex justify-between px-2 text-gray-500">
               <Link
                 to="/sign-up"
                 className="hover:text-gray-900 transition-colors duration-200"
@@ -101,18 +101,18 @@ const LoginPage = () => {
             </div>
           </Motion.div>
         </AnimatePresence>
-        <section className="absolute bottom-5 text-xs">
+        <section className="absolute bottom-2 text-xs">
           <p> app developed by Agbebi Oluwashola ©️ { new Date().getFullYear()} </p>
         </section>
       </div>
 
       {/** text */}
-      <div className="hidden md:flex items-center justify-center rounded-2xl md:p-16">
+      <div className="hidden md:flex items-center justify-center rounded-2xl shadow-2xl">
         <div className="flex flex-col items-center text-center p-6 max-w-md">
           <img
             src="/chat3.svg"
             alt="Secure chat image"
-            className="w-80 h-auto mb-6"
+            className=" h-auto mb-6"
           />
 
           <h2 className="text-2xl font-semibold mb-3 leading-tight">

@@ -8,11 +8,11 @@ const UserRightSideProfile = () => {
   const { selectedUser } = messageStore();
   const createdDate = selectedUser?.createdAt ? new Date(selectedUser.createdAt) : null;
   return (
-    <div className="w-full px-4 py-1">
+    <div className="w-full lg:px-1 xl:px-12 py-1">
       <div className="space-y-4 bg-left-side p-4 rounded-xl">
         <div className="flex items-center justify-center space-x-4 p-4">
           <img
-            src={selectedUser?.profilePic || "/profile-avatar.jpg"}
+            src={selectedUser?.profilePic || "/profile-avatar.png"}
             alt="avatar"
             className="w-16 h-16 border rounded-full"
           />

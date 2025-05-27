@@ -16,7 +16,7 @@ const CustomButton = ({
     <button
       type={type}
       disabled={disabled || isLoading}
-      className={`rounded-md mt-3 mb-3 text-center w-full bg-purple-600 hover:scale-95 hover:bg-purple-700 text-white md:py-3 py-2 disabled:cursor-not-allowed transition-colors duration-200 ${className}`}
+      className={`rounded-xl text-xs sm:text-sm text-center w-full bg-purple-600 hover:shadow-inner hover:bg-purple-800 text-white py-4 md:py-3  disabled:cursor-not-allowed disabled:bg-gray-300 transition-colors duration-300 ease-linear ${className}`}
       {...props}
     >
       {isLoading ? (
