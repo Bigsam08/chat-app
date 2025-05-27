@@ -72,7 +72,7 @@ const SignUpPage = () => {
   return (
     <div className="grid md:grid-cols-2 md:p-5 p-2 min-h-screen w-full bg-custom">
       {/** form */}
-      <div className="flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
+      <div className="relative flex justify-center items-center px-4 md:px-10 py-10 min-h-screen">
         <AnimatePresence>
           <Motion.div
             initial={{ opacity: 0 }}
@@ -160,6 +160,11 @@ const SignUpPage = () => {
             </div>
           </Motion.div>
         </AnimatePresence>
+        <section className="absolute bottom-5 text-xs">
+          <p>
+            app developed by Agbebi Oluwashola ©️ {new Date().getFullYear()}{" "}
+          </p>
+        </section>
       </div>
 
       {/** text */}
