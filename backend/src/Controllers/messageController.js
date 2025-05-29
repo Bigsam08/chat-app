@@ -2,7 +2,6 @@
 const User = require("../Models/User.model");
 const Messages = require("../Models/message.model");
 const cloudinary = require("../Utils/cloudinary");
-const { getReceiverSocketId, io } = require("../Utils/socketServer")
 
 const getUsers = async (req, res) => {
     try {
@@ -56,7 +55,7 @@ const sendMessage = async (req, res) => {
 
         // to send a message
         // get the user message or image from the post verb
-        const { text, images } = req.body;
+        const { text, images, receiverUserName } = req.body;
 
         // get my id and get sender id
         const myId = req.user._id;
@@ -76,21 +75,20 @@ const sendMessage = async (req, res) => {
             text,
             images: imageUrl
         })
-        await newMessage.save();
-
-        // after saving to db fetch the receiver id and send it to the  socket util function
-        // passing it as argument in the getReceiverId
-
-        const receiverSocketId = getReceiverSocketId(receiverId)
-        if (receiverSocketId) {
-
-            // notify only the receiver and not all contact
-            io.to(receiverSocketId).emit("newMessage", newMessage)
-        }
+        await newMessage.save(); // save to db
         await newMessage.populate("senderId", "_id profilePic");
-        res.status(201).json(newMessage);
 
-        // re
+        // send it directly to user if user is online
+        const io = req.app.get("io");
+        const onlineUsers = io.onlineUsers
+
+        // get the receiver username from the request body and verify if its in te online array
+        // if true.. emit the new message to client
+        const receiverOnline = onlineUsers[receiverUserName]
+        if (receiverOnline) {
+            io.to(receiverOnline).emit("new-message", newMessage)
+        }
+        res.status(201).json(newMessage);
 
     } catch (error) {
         console.log("Error in message Controller", error.message)
@@ -108,7 +106,7 @@ const searchUser = async (req, res) => {
             userName: { $regex: query, $options: 'i' }
         }).select("-password")
 
-        // chek if the user searched for doesnt exist send this message
+        // check if the user searched for doesn't exist send this message
         if (user.length === 0) {
             return res.status(400).json({ message: "No user found" })
         }

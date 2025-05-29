@@ -7,9 +7,6 @@ import { io } from "socket.io-client";
 
 
 export const authStore = create((set, get) => ({
-    onlineUsers: [],
-    socket: null,
-
 
     //check user auth
     checkingAuth: true,
@@ -167,26 +164,38 @@ export const authStore = create((set, get) => ({
     },
 
     // socket connection
+    onlineUsers: [],
+    socket: null,
     socketConnection: () => {
-        const { userAuth } = get();
-        if (!userAuth || get().socket?.connected) return;
+        const { userAuth, socket } = get();
+        if (!userAuth || socket) return;
 
-        const socket = io(import.meta.env.VITE_BACKEND_URL, {
-            query: {
-                userId: userAuth.id,
-            },
-        })
-        socket.connect()
+        const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
+            withCredentials: true,
+        });
 
-        set({ socket: socket })
-        socket.on("getOnlineUsers", (userIds) => {
-            set({ onlineUsers: userIds})
-        })
+        // connect to the backend socket with the key event listener join 
+        newSocket.on('connect', () => {
+            console.log('Connected to socket server');
+            newSocket.emit('join', { userId: userAuth.id, userName: userAuth.userName });
+        });
+
+        // get all online users 
+        newSocket.on("announce", ({ userNames }) => {
+            set({ onlineUsers: userNames });
+            console.log(userNames)
+        });
+        set({ socket: newSocket });
     },
 
-    
+
     socketDisconnection: () => {
-        if (get().socket?.connected) get().socket.disconnect();
-    }
+        const { socket } = get();
+        if (socket) {
+            socket.removeAllListeners();
+            socket.disconnect();
+            set({ socket: null, onlineUsers: [] });
+        }
+    },
 
 }));

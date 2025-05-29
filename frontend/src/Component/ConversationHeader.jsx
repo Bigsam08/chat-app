@@ -24,7 +24,7 @@ const ConversationHeader = () => {
             />
              <div
               className={`absolute size-3 rounded-full bottom-0 left-7 ${
-                onlineUsers.includes(selectedUser._id)
+                onlineUsers?.includes(selectedUser.userName)
                   ? "bg-green-500"
                   : "bg-gray-400"
               }`}
@@ -33,7 +33,7 @@ const ConversationHeader = () => {
           <div>
             <h3 className="font-medium">{selectedUser.userName}</h3>
             <p className="text-sm text-dim">
-              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+              {onlineUsers?.includes(selectedUser.userName) ? "Online" : "Offline"}
             </p>
            
           </div>

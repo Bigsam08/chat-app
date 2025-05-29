@@ -53,8 +53,30 @@ const ChatWelcome = () => {
    * if the search field inout excluding spaces is empty ? show all users
    * else if search field has input  show result of search
    */
+  const shuffleArray = (array) => {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
 
-  const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
+  const baseUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
+
+  const onlineUsersList = baseUsers.filter((user) =>
+    onlineUsers.includes(user.userName)
+  );
+  const offlineUsersList = baseUsers.filter(
+    (user) => !onlineUsers.includes(user.userName)
+  );
+
+  // Shuffle offline users only
+  const shuffledOfflineUsers = shuffleArray(offlineUsersList);
+
+  // Combine online users (stay on top) + shuffled offline users
+  const displayUsers = [...onlineUsersList, ...shuffledOfflineUsers];
+
 
   const handleToggle = () => {
     setDisplayContact(!displayContact);
@@ -154,13 +176,15 @@ const ChatWelcome = () => {
                         {user.userName || "Unknown"}
                       </p>
                       <p className="text-sm font-thin text-dim">
-                        {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                        {onlineUsers?.includes(user.userName)
+                          ? "Online"
+                          : "Offline"}
                       </p>
                     </div>
                     {/** online indicator */}
                     <div
                       className={`absolute size-3 rounded-full top-3 left-9 ${
-                        onlineUsers.includes(user._id)
+                        onlineUsers?.includes(user.userName)
                           ? "bg-green-500"
                           : "bg-gray-400"
                       }`}

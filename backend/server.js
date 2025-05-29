@@ -2,9 +2,18 @@
  * server main entry point
  */
 
+require('dotenv').config(); // import dotenv configuration
 
 const express = require('express');
-require('dotenv').config(); // import dotenv configuration
+const app = express();
+
+const http = require("http");
+const server = http.createServer(app);
+
+const { socketInitializer } = require("./src/Utils/socketServer"); // import socket io
+const io = socketInitializer(server); // connect socket io function to the server
+app.set('io', io); // sets io to be globally used in the app
+
 
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -13,7 +22,6 @@ const db_connection = require('./src/DB/db.config');  //import the db configurat
 const authRoute = require('./src/Routes/authRoute') //import the api endpoint module from the route.
 const messageRoute = require("./src/Routes/messageRoute");
 
-const { server, app } = require("./src/Utils/socketServer"); // import socket io
 
 
 const PORT = process.env.PORT

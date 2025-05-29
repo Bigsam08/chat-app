@@ -46,7 +46,31 @@ const Sidebar = () => {
    * else if search field has input  show result of search
    */
 
-  const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
+  const shuffleArray = (array) => {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  const baseUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
+
+  const onlineUsersList = baseUsers.filter((user) =>
+    onlineUsers.includes(user.userName)
+  );
+  const offlineUsersList = baseUsers.filter(
+    (user) => !onlineUsers.includes(user.userName)
+  );
+
+  // Shuffle offline users only
+  const shuffledOfflineUsers = shuffleArray(offlineUsersList);
+
+  // Combine online users (stay on top) + shuffled offline users
+  const displayUsers = [...onlineUsersList, ...shuffledOfflineUsers];
+
+  // const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
 
   return (
     <aside className="hidden md:flex pt-2 h-[calc(100vh-6rem)] shadow-lg rounded-xl m-2 bg-left-side">
@@ -84,46 +108,47 @@ const Sidebar = () => {
         {isFetchingUsers || searchingUser ? (
           <SkeletonLoader />
         ) : userFetchError ? (
-          <p className="text-dim p-2 text-sm">😔 Error has occurred, refresh </p>
+          <p className="text-dim p-2 text-sm">
+            😔 Error has occurred, refresh{" "}
+          </p>
         ) : displayUsers.length === 0 ? (
           <p className="text-dim p-2 text-sm">No users found </p>
         ) : (
           <div className="overflow-y-auto w-full">
-            {displayUsers.map((user, idx) => (
-              <button
-                onClick={() => setSelectedUser(user)}
-                key={user._id || idx}
-                className={`relative flex gap-4 items-center w-full p-2 mb-4 mt-3 shadow-lg hover:scale-95 rounded-xl transition-colors ease-in-out duration-300
-                   ${
-                  selectedUser?._id === user._id
-                    ? "hover-left"
-                    : ""
-                }`}
-              >
-                <img
-                  src={user?.profilePic || "/profile-avatar.png"}
-                  alt="user profile pic"
-                  className="relative rounded-full object-cover size-9 "
-                />
-                {/** name and online status */}
-                <div>
-                  <p className="text-sm truncate font-bold">
-                    {user.userName || "Unknown"}
-                  </p>
-                  <p className="text-sm font-thin text-dim">
-                    {onlineUsers.includes(user._id) ? "Online" : "Offline"}
-                  </p>
-                </div>
-                {/** online indicator */}
-                <div
-                  className={`absolute size-3 rounded-full bottom-3 left-9 ${
-                    onlineUsers.includes(user._id)
-                      ? "bg-green-500"
-                      : "bg-gray-400"
-                  }`}
-                ></div>
-              </button>
-            ))}
+            {displayUsers.map((user, idx) => {
+              const isUserOnline =
+                user?.userName && onlineUsers?.includes(user.userName);
+
+              return (
+                <button
+                  onClick={() => setSelectedUser(user)}
+                  key={user._id || idx}
+                  className={`relative flex gap-4 items-center w-full p-2 mb-4 mt-3 shadow-lg hover:scale-95 rounded-xl transition-colors ease-in-out duration-300
+                   ${selectedUser?._id === user._id ? "hover-left" : ""}`}
+                >
+                  <img
+                    src={user?.profilePic || "/profile-avatar.png"}
+                    alt="user profile pic"
+                    className="relative rounded-full object-cover size-9 "
+                  />
+                  {/** name and online status */}
+                  <div>
+                    <p className="text-sm truncate font-bold">
+                      {user.userName || "Unknown"}
+                    </p>
+                    <p className="text-sm font-thin text-dim">
+                      {isUserOnline ? "Online" : "Offline"}
+                    </p>
+                  </div>
+                  {/** online indicator */}
+                  <div
+                    className={`absolute size-3 rounded-full bottom-3 left-9 ${
+                      isUserOnline ? "bg-green-500" : "bg-gray-400"
+                    }`}
+                  ></div>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

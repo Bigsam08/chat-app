@@ -5,7 +5,7 @@ import { messageStore } from "../Store/messageStore";
 import toast from "react-hot-toast";
 
 const ChatInput = () => {
-  const { sendMessage, isSendingMessage } = messageStore();
+  const { sendMessage, isSendingMessage, selectedUser } = messageStore();
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
   const [imagePrev, setImagePrev] = useState(null);
@@ -22,6 +22,7 @@ const ChatInput = () => {
       await sendMessage({
         text: message.trim(),
         images: image,
+        receiverUserName: selectedUser.userName,
       });
       // clear states
       setMessage("");

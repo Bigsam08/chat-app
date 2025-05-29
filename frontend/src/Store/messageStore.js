@@ -65,39 +65,43 @@ export const messageStore = create((set, get) => ({
     },
 
     // get new messages live
-    getNewMessages: () => {
+    getLiveMessage: () => {
         const { selectedUser } = get();
         if (!selectedUser) return;
 
         // get the socket state from the authStore
         const socket = authStore.getState().socket;
-        socket.on("newMessage", (newMessage) => {
+        socket.on("new-message", (newMessage) => {
 
             const isMsgFromSelectedUser = newMessage.senderId._id === selectedUser._id
             if (!isMsgFromSelectedUser) return;
 
-            set({ chats: [...get().chats, newMessage] })
-        })
+            set((state) => ({
+                chats: [...state.chats, newMessage]
+            }));
+        });
     },
 
+    // turn off live message
     offlineMessages: () => {
         const socket = authStore.getState().socket;
-        socket.off("newMessage");
+        if (!socket) return;
+        socket.off("new-message");
     },
 
     // filter for the search bar
     searchingUser: false,
     searchResult: [],
     searchSpecificUser: async (query) => {
-        set({  searchingUser: true })
+        set({ searchingUser: true })
         try {
             const response = await userAxios.get("/search-user", { params: { query: query } })
-            set({ searchResult: response.data,  searchingUser: false, })
+            set({ searchResult: response.data, searchingUser: false, })
         } catch (error) {
             set({ searchResult: [] })
             console.log(error.message)
         } finally {
-            set({  searchingUser: false })
+            set({ searchingUser: false })
         }
 
     },

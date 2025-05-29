@@ -18,20 +18,27 @@ const ConversationPage = () => {
     getChats,
     chats,
     selectedUser,
-    getNewMessages,
+    getLiveMessage,
     offlineMessages,
   } = messageStore();
   const { userAuth } = authStore(); // get my id
 
   const bottomRef = useRef(null);
 
+  //if conversation is selected activate live message
+  useEffect(() => {
+    if (selectedUser) {
+      getLiveMessage();
+    }
+    return () => {
+      offlineMessages();
+    };
+  }, [getLiveMessage, selectedUser, offlineMessages]);
+
   // fetch all the user chats
   useEffect(() => {
     getChats(selectedUser._id);
-    getNewMessages();
-
-    return () => offlineMessages();
-  }, [getChats, selectedUser._id, offlineMessages, getNewMessages]);
+  }, [getChats, selectedUser._id]);
 
   // Scroll to bottom when chats change
   useEffect(() => {
@@ -61,9 +68,7 @@ const ConversationPage = () => {
             return (
               <div
                 key={message._id}
-                className={`chat ${
-                  myMessage ? "chat-end" : "chat-start"
-                } p-2 `}
+                className={`chat ${myMessage ? "chat-end" : "chat-start"} p-2 `}
               >
                 {/** chat image avatar  */}
                 <div className="chat-image avatar">
@@ -91,7 +96,9 @@ const ConversationPage = () => {
                 {/** chat bubble */}
                 <div
                   className={`chat-bubble flex flex-col text-md ${
-                    myMessage ? "chat-bubble-bg rounded-xl" : " bg-gray-400 rounded-xl"
+                    myMessage
+                      ? "chat-bubble-bg rounded-xl"
+                      : " bg-gray-400 rounded-xl"
                   }`}
                 >
                   {message.images && (
