@@ -72,7 +72,7 @@ const ConversationPage = () => {
               >
                 {/** chat image avatar  */}
                 <div className="chat-image avatar">
-                  <div className="size-10 border rounded-full">
+                  <div className="size-10  rounded-full border border-gray-300">
                     <img
                       src={
                         myMessage
@@ -95,7 +95,7 @@ const ConversationPage = () => {
 
                 {/** chat bubble */}
                 <div
-                  className={`chat-bubble flex flex-col text-md ${
+                  className={`chat-bubble flex flex-col text-xs md:text-sm ${
                     myMessage
                       ? "chat-bubble-bg rounded-xl"
                       : " bg-gray-400 rounded-xl"
@@ -118,7 +118,7 @@ const ConversationPage = () => {
       </main>
 
       {/** chat input */}
-      <section>
+      <section className="">
         <ChatInput />
       </section>
     </div>

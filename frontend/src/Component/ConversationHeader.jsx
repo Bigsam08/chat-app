@@ -16,7 +16,7 @@ const ConversationHeader = () => {
       <div className="flex items-center justify-between">
         {/** user image or dp */}
         <div className="flex items-center gap-3">
-          <div className="relative avatar rounded-full size-10">
+          <div className="relative avatar rounded-full size-10 border border-gray-300">
             <img
               src={selectedUser?.profilePic || "/profile-avatar.png"}
               alt="user profile pic"

@@ -18,15 +18,15 @@ const ChatSkeletonLoader = ({ count = 8 }) => {
             {/* Message bubble */}
             <div
               className={`rounded-xl ${
-                isSender ? "bg-gray-700" : "bg-gray-300"
-              } p-2 max-w-xs w-full sm:w-1/3`}
+                isSender ? "bg-gray-300" : "bg-gray-300"
+              } p-2 max-w-xs w-1/3`}
             >
               {isImage ? (
-                <div className="w-full h-32 bg-gray-500 rounded-md" />
+                <div className="w-full h-7 rounded-md" />
               ) : (
                 <div className="space-y-2">
-                  <div className="h-3 w-3/4 bg-gray-500 rounded" />
-                  <div className="h-3 w-1/2 bg-gray-600 rounded" />
+                  <div className="h-1 w-3/4 bg-gray-300 rounded" />
+                
                 </div>
               )}
             </div>

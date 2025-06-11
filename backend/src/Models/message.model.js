@@ -21,9 +21,16 @@ const messageSchema = new mongoose.Schema({
     },
     images : {
         type : String
-    }
+    },
+
+    isRead : {
+        type: Boolean,
+        default: false
+    },
 },
+
 {timestamps: true}
+
 )
 
 const MessageModel = mongoose.model("messages", messageSchema);

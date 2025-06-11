@@ -9,6 +9,7 @@ import Spinner from "../Component/Loaders/Spinner"; // button loader
 import { format } from "date-fns"; // format user account creation date
 
 const Setting = () => {
+
   const {
     userAuth,
     isUpdatingProfilePic,
@@ -18,6 +19,8 @@ const Setting = () => {
     isDeleting,
     deleteUser,
   } = authStore();
+
+
   const [deleteAccountConfirmation, setDeleteAccountConfirmation] =
     useState("");
   const [status, setStatus] = useState(userAuth?.status || ""); // get user updated status
@@ -52,6 +55,7 @@ const Setting = () => {
 
   useEffect(() => {
     setStatus(userAuth?.status || "");
+    //eslint disable next line missing dependency array
   }, []);
 
   // delete user account
@@ -60,17 +64,17 @@ const Setting = () => {
   };
 
   return (
-    <div className="h-screen bg-custom p-4 md:p-10">
-      {/* Middle container */}
-      <div className="max-w-2xl mx-auto bg-gray-900 p-5 text-white rounded-md  md:p-10 h-full md:h-auto overflow-y-auto md:overflow-visible">
-        <div className="flex gap-3 items-center mb-4">
+    <div className="bg-main p-4 min-h-screen">
+      {/** back arrow div */}
+       <div className="flex gap-3 items-center mb-4">
           <Link to="/chat">
-            {" "}
             <ArrowLeftIcon className="h-6 w-6 hover:scale-90" />
           </Link>
-          <h2 className="text-md md:text-xl font-semibold">Profile Settings</h2>
+          <h2 className="text-sm md:text-md font-semibold">Profile Settings</h2>
         </div>
 
+      {/* Middle container */}
+      <div className="max-w-2xl mx-auto bg-main shadow-2xl p-5 border overflow-y-auto flex-1 border-dim text-main rounded-md  md:p-10 ">
         {/* Picture container */}
         <section className="flex flex-col justify-center items-center mt-6 gap-2">
           <div className="relative h-28 w-28 md:w-48 md:h-48">
@@ -112,7 +116,7 @@ const Setting = () => {
             maxLength={100}
             onChange={(e) => setStatus(e.target.value)}
             value={status}
-            className="w-full px-4 py-2 bg-gray-800 border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="w-full px-4 py-2 bg- border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 bg-gray-700 text-white"
           />
           <div className="flex justify-end mt-2 px-1">
             <button
@@ -133,7 +137,7 @@ const Setting = () => {
         </section>
 
         {/** user details*/}
-        <div className="mt-4 p-3 border border-gray-800">
+        <div className="mt-4 p-3 border border-gray-800 space-y-3">
           <p className="text-sm mb-2"> User details:</p>
           <FormField
             label="user name"
@@ -162,7 +166,7 @@ const Setting = () => {
           {/** modal pop up to confirm user account deletion */}
           {/* Open the modal using document.getElementById('ID').showModal() method */}
           <button
-            className="btn border-red-500 text-red-500 mt-5 text-sm hover:bg-red-500 hover:text-white hover:shadow-inner transition-colors duration-500"
+            className="btn border-red-500 text-red-500 mt-5 text-sm bg-main hover:bg-red-500 hover:text-white hover:shadow-inner transition-colors duration-500"
             onClick={() => document.getElementById("my_modal_1").showModal()}
           >
             Delete My Account
@@ -176,7 +180,7 @@ const Setting = () => {
               <div className="modal-action">
                 <form method="dialog" className="w-full">
                   {/* if there is a button in form, it will close the modal */}
-                  <p className="text-sm">
+                  <p className="text-sm text-white">
                     To confirm please type <strong> "Delete my account"</strong>{" "}
                     in the box below to proceed or press close to go back.
                   </p>
@@ -187,7 +191,7 @@ const Setting = () => {
                       setDeleteAccountConfirmation(e.target.value);
                     }}
                     value={deleteAccountConfirmation}
-                    className="input mt-4 w-full hover:outline-none focus:outline-none"
+                    className="input mt-4 w-full hover:outline-none focus:outline-none text-white"
                   />
                   {/** delete and close button */}
                   <div className="flex justify-between items-center p-2 mt-5">

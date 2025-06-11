@@ -183,7 +183,6 @@ export const authStore = create((set, get) => ({
         // get all online users 
         newSocket.on("announce", ({ userNames }) => {
             set({ onlineUsers: userNames });
-            console.log(userNames)
         });
         set({ socket: newSocket });
     },

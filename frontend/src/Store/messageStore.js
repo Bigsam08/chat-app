@@ -66,19 +66,33 @@ export const messageStore = create((set, get) => ({
 
     // get new messages live
     getLiveMessage: () => {
-        const { selectedUser } = get();
-        if (!selectedUser) return;
 
         // get the socket state from the authStore
         const socket = authStore.getState().socket;
         socket.on("new-message", (newMessage) => {
 
-            const isMsgFromSelectedUser = newMessage.senderId._id === selectedUser._id
-            if (!isMsgFromSelectedUser) return;
+            const { selectedUser, unreadCount } = get();
 
-            set((state) => ({
-                chats: [...state.chats, newMessage]
-            }));
+            const isMsgFromSelectedUser = newMessage.senderId._id === selectedUser._id
+            if (isMsgFromSelectedUser) {
+                set((state) => ({
+                    chats: [...state.chats, newMessage]
+                }));
+            } else {
+                // Update unread count for that sender
+                const senderId = newMessage.senderId._id;
+                const existing = unreadCount.find((u) => u._id === senderId);
+
+                let updatedCounts;
+                if (existing) {
+                    updatedCounts = unreadCount.map((u) =>
+                        u._id === senderId ? { ...u, count: u.count + 1 } : u
+                    );
+                } else {
+                    updatedCounts = [...unreadCount, { _id: senderId, count: 1 }];
+                }
+                set({ unreadCount: updatedCounts });
+            }
         });
     },
 
@@ -105,5 +119,47 @@ export const messageStore = create((set, get) => ({
         }
 
     },
+
+    // fetch unread message count
+    unreadCount: [],
+    fetchUnReadCount: async () => {
+        try {
+            const response = await userAxios.get('/unread-count');
+            set({ unreadCount: response.data });
+        } catch (error) {
+            console.log("failed to fetch unread counts", error)
+        }
+
+    },
+
+    // clear unread msg count when user clicks on the chat
+    markMessageAsRead: (senderId) => {
+        const { unreadCount } = get();
+        const updatedCounts = unreadCount.filter((u) => u._id !== senderId);
+        set({ unreadCount: updatedCounts })
+    },
+
+    // updateReadMessages in the backend
+    updateReadMessages: async (senderId) => {
+        try {
+            await userAxios.put(`/mark-messages/${senderId}`);
+            get().fetchUnReadCount(); // refresh the count
+
+        } catch (error) {
+            console.error("Failed to mark messages as read:", error);
+        }
+    },
+
+    // fetch recent chats for mobile
+    recentChats: [],
+    fetchRecentChats: async () => {
+        try {
+            const response = await userAxios.get("/recent-chats");
+            set({ recentChats: response.data });
+        } catch (error) {
+            console.error("Failed to fetch recent chats", error);
+        }
+    },
+
 
 }))

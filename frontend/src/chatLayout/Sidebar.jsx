@@ -15,6 +15,10 @@ const Sidebar = () => {
     searchingUser,
     searchResult,
     searchSpecificUser,
+    fetchUnReadCount,
+    unreadCount,
+    markMessageAsRead,
+    updateReadMessages
   } = messageStore();
 
   // Array to display online users
@@ -25,6 +29,11 @@ const Sidebar = () => {
   useEffect(() => {
     getAllUsers();
   }, [getAllUsers]);
+
+  // fetch unread message count
+  useEffect(() => {
+    fetchUnReadCount();
+  }, [fetchUnReadCount]);
 
   // filtered search handle search logic
   useEffect(() => {
@@ -70,10 +79,19 @@ const Sidebar = () => {
   // Combine online users (stay on top) + shuffled offline users
   const displayUsers = [...onlineUsersList, ...shuffledOfflineUsers];
 
-  // const displayUsers = searchedUser.trim().length > 0 ? searchResult : allusers;
+  /**
+   * button
+   * handle selected user and clear unread messages
+   */
+
+  const handleSelectedUser = (user) => {
+    setSelectedUser(user);
+    markMessageAsRead(user._id); // clear unread msg in frontend
+    updateReadMessages(user._id); // update read msg true in backend api call
+  };
 
   return (
-    <aside className="hidden md:flex pt-2 h-[calc(100vh-6rem)] shadow-lg rounded-xl m-2 bg-left-side">
+    <aside className="hidden md:flex pt-2 h-[calc(100vh-6rem)] shadow-lg rounded-xl m-2 bg-left-side text-xs">
       {/** right contact list */}
       <div className="pl-3">
         <div className="flex items-center gap-2 pt-3 mb-5">
@@ -121,9 +139,9 @@ const Sidebar = () => {
 
               return (
                 <button
-                  onClick={() => setSelectedUser(user)}
+                  onClick={() => handleSelectedUser(user)}
                   key={user._id || idx}
-                  className={`relative flex gap-4 items-center w-full p-2 mb-4 mt-3 shadow-lg hover:scale-95 rounded-xl transition-colors ease-in-out duration-300
+                  className={`relative flex gap-4 items-center w-full p-2 mb-4 mt-3 shadow hover:scale-95 rounded-xl transition-colors ease-in-out duration-300
                    ${selectedUser?._id === user._id ? "hover-left" : ""}`}
                 >
                   <img
@@ -146,6 +164,23 @@ const Sidebar = () => {
                       isUserOnline ? "bg-green-500" : "bg-gray-400"
                     }`}
                   ></div>
+
+                  {/** unread messages count */}
+                  {unreadCount &&
+                    unreadCount.length > 0 &&
+                    (() => {
+                      const eachCount = unreadCount.find(
+                        (contact) => contact._id === user._id
+                      );
+                      if (eachCount?.count > 0) {
+                        return (
+                          <span className="absolute right-4 top-2 text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">
+                            {eachCount.count}
+                          </span>
+                        );
+                      }
+                      return null;
+                    })()}
                 </button>
               );
             })}

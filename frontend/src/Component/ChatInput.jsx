@@ -85,7 +85,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="relative flex items-center p-3 input-bg shadow-lg rounded-xl bg-chat">
+    <div className="relative flex items-center p-2 input-bg shadow-lg  bg-chat border border-dim">
       {/* Image Preview  at the top */}
       {imagePrev && (
         <div className="absolute bottom-full mb-3 flex gap-2 items-center left-0 w-full px-3">
@@ -114,7 +114,7 @@ const ChatInput = () => {
         className="cursor-pointer mr-3"
         title="Upload Image"
       >
-        <PhotoIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+        <PhotoIcon className="w-6 h-6 text-main" />
       </button>
 
       {/* Image Input */}
@@ -140,10 +140,10 @@ const ChatInput = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={isSendingMessage}
-          className={`flex-1 px-4 py-2 rounded-md border ${
+          className={`flex-1 px-4 py-2 rounded-md  ${
             isSendingMessage
               ? "bg-gray-100 cursor-not-allowed"
-              : "border-gray-300 bg-black focus:outline-none focus:ring-2 focus:ring-purple-500"
+              : "border-gray-300 bg-chat-input focus:outline-none focus:ring-2 focus:ring-purple-500"
           } dark:text-white`}
         />
         {/* Send Button */}

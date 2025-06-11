@@ -31,13 +31,13 @@ input:-webkit-autofill:focus {
   --text-main: #ffffffff; /* snow white*/
   --text-dim: #cbd5e0; /* gray-400*/
   --border-main: #fff;
-  --border-dim: #cbd5e0; /* gray-400*/
+  --border-dim:  #6b7280; /* gray-500*/
   --bg-left-side: #4c1d75; /* purple 900 */
   --hover-left: #111827;
   --chat-bubble-bg: linear-gradient(to right, #3b82f6, #8b5cf6);
   --input-bg: #581c87;
   --bg-chat: url("/purple-bg.jpg");
-
+  --bg-chat-input: #581c87; /** gray 800*/
 }
 
 /**
@@ -45,13 +45,14 @@ input:-webkit-autofill:focus {
 */
 .snow {
   --bg-main: #e5e7eb; /* snow white*/
-  --text-main: #111827; /* black */
+  --text-main: #581c87; /* purple 900 */
   --text-dim: #6b7280; /* gray-500*/
   --border-main: #000; /* black */
   --bg-left-side: #e5e7eb; /* gray 200 */
   --hover-left: #9ca3af; /* gray 400 */
   --input-bg: #fff;
   --bg-chat: url("/chatwhite.jpg");
+  --bg-chat-input: #581c87; /** gray 800*/
 }
 /**
 * darkie theme
@@ -60,12 +61,13 @@ input:-webkit-autofill:focus {
   --bg-main: #111827; /* gray-900 */
   --text-main: #f9fafb; /* gray-50 */
   --text-dim: #9ca3af; /* gray-400 */
-  --border-dim: #4b5563; /* gray-600 */
+  --border-dim: #1f2937; /* gray-600 */
   --accent: #8b5cf6; /* violet-500 */
   --bg-left-side: #1f2937; /* gray 800 */
   --hover-left: #111827; /* gray-900 */
   --input-bg: #111827;
   --bg-chat: url("/chattybg.jpg");
+  --bg-chat-input: #1f2937; /** gray 800*/
 }
 
 .theme-wrapper {
@@ -93,13 +95,16 @@ input:-webkit-autofill:focus {
   background: linear-gradient(to right, #3b82f6, #8b5cf6);
 }
 .input-bg {
-  background-color: var(--input-bg)
+  background-color: var(--input-bg);
 }
 .bg-chat {
   background-image: var(--bg-chat);
 }
-.bg-main{
-  background-color: var(--bg-main)
+.bg-main {
+  background-color: var(--bg-main);
+}
+.bg-chat-input {
+  background-color: var(--bg-chat-input);
 }
 
 .bg-custom {

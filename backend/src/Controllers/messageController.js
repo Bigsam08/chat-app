@@ -118,4 +118,108 @@ const searchUser = async (req, res) => {
     }
 }
 
-module.exports = { getMessage, getUsers, sendMessage, searchUser };
+const getUnreadCount = async (req, res) => {
+    // get all unread messages count per user
+    const userId = req.user._id;
+
+    const counts = await Messages.aggregate([
+        {
+            $match: { receiverId: userId, isRead: false }
+        },
+        {
+            $group: {
+                _id: "$senderId",
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+    res.json(counts);
+}
+
+const messageRead = async (req, res) => {
+    // function updates the messages in the db to true
+    try {
+        const receiverId = req.user._id // where i am  the receiver
+        const { senderId } = req.params;
+
+        await Messages.updateMany(
+            { senderId, receiverId, isRead: false }, // find the messages
+            { $set: { isRead: true } }  // update them to true
+        );
+
+        res.status(200).json({ message: "Messages marked as read" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+const recentChats = async (req, res) => {
+    // get recent user chats for mobile screen
+    try {
+        const myId = req.user._id;
+
+        const messages = await Messages.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { senderId: myId },
+                        { receiverId: myId }
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    otherUserId: {
+                        $cond: {
+                            if: { $eq: ["$senderId", myId] },
+                            then: "$receiverId",
+                            else: "$senderId"
+                        }
+                    }
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            },
+            {
+                $group: {
+                    _id: "$otherUserId",
+                    lastMessage: { $first: "$text" },
+                    lastMessageAt: { $first: "$createdAt" }
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $project: {
+                    userId: "$user._id",
+                    userName: "$user.userName",
+                    profilePic: "$user.profilePic",
+                    lastMessage: 1,
+                    lastMessageAt: 1
+                }
+            },
+            {
+                $sort: { lastMessageAt: -1 }
+            }
+        ]);
+
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error("Error fetching recent chats:", error);
+        res.status(500).json({ message: "Something went wrong" });
+    }
+
+}
+
+module.exports = { getMessage, getUsers, sendMessage, searchUser, getUnreadCount, messageRead, recentChats };
