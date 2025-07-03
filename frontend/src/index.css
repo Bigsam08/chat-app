@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/Comfortaa-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/Comfortaa-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/Comfortaa-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'League Spartan';
+  src: url('/fonts/LeagueSpartan-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'League Spartan';
+  src: url('/fonts/LeagueSpartan-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+
 * {
   font-family: "Comfortaa", sans-serif;
 }
@@ -9,7 +45,7 @@
 .logo-font {
   font-family: "League Spartan", sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 500;
   font-style: normal;
 }
 /* Tailwind CSS for autofill handling */

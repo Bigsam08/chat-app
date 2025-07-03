@@ -34,7 +34,7 @@ const ForgetPasswordPage = () => {
           >
             {/* Logo/Title */}
             <div className="flex justify-center">
-              <img src="/chatlogo.png" alt="Q chat logo" className="" />
+              <img src="/chatlogo.webp" alt="Q chat logo"   fetchpriority="high" className="h-60 w-60 object-contain" />
             </div>
 
             {/* Welcome Message */}
@@ -102,7 +102,7 @@ const ForgetPasswordPage = () => {
             intuitive messaging platform built for modern communication.
           </p>
 
-          <div className="bg-green-600 text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+          <div className="bg-green-700 text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             🔒 End-to-end encrypted
           </div>
         </div>

@@ -24,7 +24,9 @@ const FormField = ({
   return (
     <div className="form-control w-full">
       <label htmlFor={inputId} className="label">
-        <span className={`label-text text-xs sm:text-base font-medium ${labelColor}`}>
+        <span
+          className={`label-text text-xs sm:text-base font-medium ${labelColor}`}
+        >
           {label}
         </span>
       </label>
@@ -52,6 +54,7 @@ const FormField = ({
         {type === "password" && (
           <button
             type="button"
+            aria-label="Close menu"
             onClick={togglePassword}
             className="absolute right-3 top-1/2 -translate-y-1/2 text gray-500 z-10"
           >

@@ -38,7 +38,14 @@ const LoginPage = () => {
           >
             {/* Logo/Title */}
             <div className="flex justify-center">
-              <img src="/chatlogo.png" alt="Q chat logo" className="h-60" />
+              <img
+                src="/chatlogo.webp"
+                alt="Q chat logo"
+                fetchPriority="high"
+                className="h-60 w-60 object-contain"
+                width={240}
+                height={240}
+              />
             </div>
 
             {/* Welcome Message */}
@@ -102,7 +109,10 @@ const LoginPage = () => {
           </Motion.div>
         </AnimatePresence>
         <section className="absolute bottom-2 text-xs">
-          <p> app developed by Agbebi Oluwashola ©️ { new Date().getFullYear()} </p>
+          <p>
+            {" "}
+            app developed by Agbebi Oluwashola ©️ {new Date().getFullYear()}{" "}
+          </p>
         </section>
       </div>
 
@@ -113,6 +123,7 @@ const LoginPage = () => {
             src="/chat3.svg"
             alt="Secure chat image"
             className=" h-auto mb-6"
+            loading="lazy"
           />
 
           <h2 className="text-2xl font-semibold mb-3 leading-tight">
@@ -124,7 +135,7 @@ const LoginPage = () => {
             intuitive messaging platform built for modern communication.
           </p>
 
-          <div className="bg-green-600 text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+          <div className="bg-green-700 text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             🔒 End-to-end encrypted
           </div>
         </div>
